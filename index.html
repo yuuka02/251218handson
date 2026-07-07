@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Äventyr Svenska — スウェーデン語 野外会話トレーナー</title>
+<style>
+  :root {
+    --bg: #f4f7f2;
+    --card: #ffffff;
+    --ink: #23301f;
+    --sub: #5c6b55;
+    --forest: #2e6b3e;
+    --forest-dark: #1f4d2c;
+    --sky: #dbeafe;
+    --accent: #e8b931;
+    --danger: #c0392b;
+    --line: #dde5d8;
+    --radius: 14px;
+    font-size: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding-bottom: 90px;
+  }
+  header {
+    background: linear-gradient(150deg, var(--forest-dark), var(--forest));
+    color: #fff;
+    padding: 18px 16px 14px;
+    text-align: center;
+  }
+  header h1 { font-size: 1.15rem; letter-spacing: .02em; }
+  header p { font-size: .78rem; opacity: .85; margin-top: 4px; }
+
+  .rate-bar {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: rgba(255,255,255,.12); border-radius: 99px;
+    padding: 6px 14px; margin: 10px auto 0; max-width: 340px;
+    font-size: .78rem;
+  }
+  .rate-bar input { flex: 1; accent-color: var(--accent); }
+
+  #voiceWarn {
+    display: none;
+    background: #fdf3d7; color: #7a5c00;
+    font-size: .8rem; padding: 10px 14px; text-align: center;
+    border-bottom: 1px solid #f0dfa8;
+  }
+
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+
+  nav.tabs {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; background: #fff;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -4px 16px rgba(0,0,0,.06);
+    z-index: 10;
+  }
+  nav.tabs button {
+    flex: 1; padding: 10px 4px 12px; border: none; background: none;
+    font-size: .72rem; color: var(--sub); cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-family: inherit;
+  }
+  nav.tabs button .ico { font-size: 1.3rem; }
+  nav.tabs button.active { color: var(--forest); font-weight: 700; }
+
+  .scene-list { display: grid; gap: 10px; }
+  .scene-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; transition: transform .08s;
+    text-align: left; width: 100%; font-family: inherit;
+  }
+  .scene-card:active { transform: scale(.98); }
+  .scene-card .emoji { font-size: 1.7rem; }
+  .scene-card h3 { font-size: .95rem; }
+  .scene-card p { font-size: .76rem; color: var(--sub); margin-top: 2px; }
+  .scene-card .badge {
+    margin-left: auto; font-size: .68rem; background: var(--sky);
+    color: #1e4e8c; border-radius: 99px; padding: 3px 8px; white-space: nowrap;
+  }
+  .scene-card.important { border-color: var(--accent); background: #fffaf0; }
+
+  .back-btn {
+    background: none; border: none; color: var(--forest);
+    font-size: .85rem; cursor: pointer; margin-bottom: 12px; font-family: inherit;
+    padding: 4px 0;
+  }
+
+  .dialog-line {
+    display: flex; gap: 10px; margin-bottom: 14px;
+  }
+  .dialog-line.me { flex-direction: row-reverse; }
+  .dialog-line .who {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; background: #e3ecdd;
+  }
+  .dialog-line.me .who { background: var(--sky); }
+  .bubble {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 10px 12px; max-width: 82%;
+  }
+  .dialog-line.me .bubble { background: #eef6ff; border-color: #cfe3f7; }
+  .bubble .sv { font-weight: 700; font-size: .95rem; line-height: 1.45; }
+  .bubble .sv.hidden-sv { filter: blur(6px); user-select: none; }
+  .bubble .ja { font-size: .78rem; color: var(--sub); margin-top: 4px; line-height: 1.5; }
+  .bubble .ja.hidden-ja { display: none; }
+  .bubble .note { font-size: .72rem; color: #8a6d1a; margin-top: 4px; background: #fdf6e0; border-radius: 6px; padding: 3px 7px; display: inline-block; }
+  .bubble .tools { margin-top: 7px; display: flex; gap: 6px; }
+  .tool-btn {
+    border: 1px solid var(--line); background: #fff; border-radius: 8px;
+    font-size: .78rem; padding: 4px 9px; cursor: pointer; font-family: inherit;
+    color: var(--ink);
+  }
+  .tool-btn:active { background: #eef2ea; }
+
+  .view-toggles { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--line); background: #fff; border-radius: 99px;
+    padding: 6px 13px; font-size: .78rem; cursor: pointer; font-family: inherit;
+    color: var(--ink);
+  }
+  .chip.on { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+  .big-btn {
+    display: block; width: 100%; padding: 15px; border: none;
+    border-radius: var(--radius); background: var(--forest); color: #fff;
+    font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit;
+    margin-top: 14px;
+  }
+  .big-btn:active { background: var(--forest-dark); }
+  .big-btn.ghost { background: #fff; color: var(--forest); border: 2px solid var(--forest); }
+  .big-btn:disabled { opacity: .45; }
+
+  .quiz-box { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 16px; }
+  .quiz-progress { font-size: .78rem; color: var(--sub); text-align: center; margin-bottom: 12px; }
+  .quiz-audio-btns { display: flex; gap: 10px; justify-content: center; margin: 14px 0 20px; }
+  .quiz-audio-btns button {
+    font-size: .9rem; padding: 12px 18px; border-radius: 12px;
+    border: 1px solid var(--line); background: #fff; cursor: pointer; font-family: inherit;
+  }
+  .choices { display: grid; gap: 10px; }
+  .choices button {
+    padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: #fff; font-size: .88rem; text-align: left; cursor: pointer;
+    font-family: inherit; line-height: 1.5; color: var(--ink);
+  }
+  .choices button.correct { background: #e5f5e5; border-color: #3f9d51; font-weight: 700; }
+  .choices button.wrong { background: #fdeaea; border-color: var(--danger); }
+  .quiz-reveal {
+    margin-top: 16px; padding: 12px; background: #f2f7ef; border-radius: 10px;
+    font-size: .88rem; line-height: 1.6;
+  }
+  .quiz-reveal .sv { font-weight: 700; color: var(--forest-dark); }
+  .score-big { text-align: center; font-size: 2.4rem; font-weight: 800; color: var(--forest); margin: 10px 0; }
+  .score-msg { text-align: center; font-size: .95rem; line-height: 1.7; }
+
+  .flash-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 30px 20px; text-align: center; min-height: 230px;
+    display: flex; flex-direction: column; justify-content: center; gap: 14px;
+    cursor: pointer;
+  }
+  .flash-card .sv { font-size: 1.35rem; font-weight: 800; line-height: 1.5; color: var(--forest-dark); }
+  .flash-card .ja { font-size: 1rem; color: var(--sub); }
+  .flash-card .hint { font-size: .72rem; color: #a5b09d; }
+  .flash-nav { display: flex; gap: 10px; margin-top: 12px; }
+  .flash-nav button { flex: 1; }
+  .flash-count { text-align: center; font-size: .78rem; color: var(--sub); margin-top: 10px; }
+
+  .mic-result { margin-top: 12px; font-size: .85rem; text-align: center; min-height: 1.4em; }
+  .mic-result .heard { color: var(--sub); }
+  .mic-result .verdict { font-weight: 700; }
+
+  .section-title { font-size: .82rem; color: var(--sub); margin: 18px 0 8px; font-weight: 700; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏕️ Äventyr Svenska</h1>
+  <p>ダールスランドのテント泊5日間を乗り切る スウェーデン語聞き取りトレーナー</p>
+  <div class="rate-bar">
+    <span>🐢 ゆっくり</span>
+    <input type="range" id="rateSlider" min="0.5" max="1.2" step="0.1" value="0.9">
+    <span>はやい 🐇</span>
+  </div>
+</header>
+
+<div id="voiceWarn">⚠️ スウェーデン語の音声が見つかりません。Chrome / Edge / Safari の最新版で開くか、端末にスウェーデン語TTS音声を追加してください。</div>
+
+<main id="app"></main>
+
+<nav class="tabs">
+  <button data-tab="scenes" class="active"><span class="ico">💬</span>会話シーン</button>
+  <button data-tab="quiz"><span class="ico">🎧</span>聞き取りクイズ</button>
+  <button data-tab="cards"><span class="ico">🃏</span>フレーズ帳</button>
+</nav>
+
+<script>
+/* ============================================================
+   会話データ — Dalsland äventyr コース テント泊5日間を想定
+   speaker: L = ledare(リーダー), K = kompis(仲間), M = me(自分)
+   ============================================================ */
+const SCENES = [
+  {
+    id: "survival",
+    emoji: "🆘",
+    title: "聞き取れなかったとき",
+    desc: "最重要!これさえ言えれば5日間なんとかなる",
+    important: true,
+    lines: [
+      { s: "L", sv: "Glöm inte att packa ner stormköket!", ja: "ストームコンロ(携帯コンロ)をしまうのを忘れないでね!" },
+      { s: "M", sv: "Förlåt, jag förstår inte. Kan du prata lite långsammare?", ja: "ごめんなさい、わかりません。もう少しゆっくり話してもらえますか?" },
+      { s: "L", sv: "Storm-köket. Du vet, den vi lagar mat på.", ja: "ストーム・コンロ。ほら、料理に使うあれだよ。" },
+      { s: "M", sv: "Vad betyder \"packa ner\"?", ja: "「packa ner」ってどういう意味ですか?" },
+      { s: "L", sv: "Att lägga den i ryggsäcken.", ja: "リュックサックに入れるってこと。" },
+      { s: "M", sv: "Ah, nu förstår jag! Menar du så här?", ja: "ああ、わかりました!こういうことですか?" },
+      { s: "L", sv: "Precis! Bra jobbat.", ja: "その通り!よくできました。" },
+      { s: "M", sv: "Kan du säga det igen?", ja: "もう一度言ってもらえますか?", note: "困ったらとにかくこれ!" },
+      { s: "M", sv: "Kan du visa mig?", ja: "(実際に)やって見せてもらえますか?", note: "野外活動では言葉より実演が早い" },
+      { s: "M", sv: "Jag talar bara lite svenska, men jag lär mig!", ja: "スウェーデン語は少ししか話せません、でも勉強中です!" }
+    ]
+  },
+  {
+    id: "arrival",
+    emoji: "👋",
+    title: "初日:到着と自己紹介",
+    desc: "folkhögskolaに到着、リーダーや仲間との出会い",
+    lines: [
+      { s: "L", sv: "Hej och välkommen till Dalslands folkhögskola!", ja: "こんにちは、ダールスランド国民高等学校へようこそ!" },
+      { s: "M", sv: "Tack så mycket! Jag kommer från Japan. Trevligt att träffas!", ja: "ありがとうございます!日本から来ました。はじめまして!" },
+      { s: "L", sv: "Vad kul! Har du rest länge?", ja: "いいね!長旅だった?" },
+      { s: "M", sv: "Ja, det var en lång resa, men jag är så glad att vara här.", ja: "はい、長旅でしたが、ここに来られてすごく嬉しいです。" },
+      { s: "L", sv: "Imorgon åker vi ut i skogen och tältar i fem dagar.", ja: "明日から森に出て5日間テント泊するよ。" },
+      { s: "M", sv: "Spännande! Men jag är lite nervös.", ja: "ワクワクします!でもちょっと緊張してます。" },
+      { s: "L", sv: "Ingen fara, vi hjälps åt.", ja: "心配いらないよ、みんなで助け合うから。", note: "\"Ingen fara\" = 大丈夫・問題ない(超頻出)" },
+      { s: "K", sv: "Hej! Jag heter Elsa. Vilket kul att du är med!", ja: "やあ!私はエルサ。一緒で嬉しいな!" },
+      { s: "M", sv: "Hej Elsa! Vi ses imorgon!", ja: "やあエルサ!また明日ね!" }
+    ]
+  },
+  {
+    id: "tent",
+    emoji: "⛺",
+    title: "テント設営",
+    desc: "設営場所探し、ペグ打ち、寝る準備",
+    lines: [
+      { s: "L", sv: "Var ska vi slå upp tältet?", ja: "テントはどこに張ろうか?", note: "slå upp tältet = テントを張る" },
+      { s: "K", sv: "Här är det plant och torrt.", ja: "ここは平らで乾いてるよ。" },
+      { s: "L", sv: "Kan du hålla i tältpinnarna?", ja: "ペグを持っていてくれる?" },
+      { s: "M", sv: "Visst! Var ska den här sitta?", ja: "もちろん!これはどこに刺せばいい?" },
+      { s: "K", sv: "Var är min sovsäck?", ja: "私の寝袋どこ?" },
+      { s: "L", sv: "Glöm inte liggunderlaget, annars fryser du i natt.", ja: "マットを忘れないで、じゃないと夜凍えるよ。" },
+      { s: "M", sv: "Kan jag låna din pannlampa?", ja: "ヘッドランプ借りてもいい?", note: "Kan jag låna...? = 借りるときの万能フレーズ" },
+      { s: "L", sv: "Det börjar bli mörkt, vi måste skynda oss.", ja: "暗くなってきた、急がないと。" },
+      { s: "M", sv: "Klart! Tältet står.", ja: "完成!テント立ったよ。" }
+    ]
+  },
+  {
+    id: "food",
+    emoji: "🔥",
+    title: "焚き火と料理",
+    desc: "火起こし、夕食づくり、湖で洗い物",
+    lines: [
+      { s: "L", sv: "Vem gör upp elden ikväll?", ja: "今夜は誰が火を起こす?" },
+      { s: "M", sv: "Jag kan hämta ved!", ja: "私が薪を取ってきます!" },
+      { s: "K", sv: "Vad ska vi laga till middag?", ja: "夕食は何を作ろうか?" },
+      { s: "L", sv: "Pasta med grönsaker. Kan du skicka saltet?", ja: "野菜パスタだよ。塩を取ってくれる?", note: "Kan du skicka...? = 〜を取って(回して)くれる?" },
+      { s: "M", sv: "Här får du. Det luktar jättegott!", ja: "はいどうぞ。すっごくいい匂い!" },
+      { s: "L", sv: "Maten är klar! Kom och ät!", ja: "ご飯できたよ!食べにおいで!" },
+      { s: "M", sv: "Det här är jättegott!", ja: "これ、めちゃくちゃおいしい!" },
+      { s: "K", sv: "Vill du ha mer?", ja: "おかわりいる?" },
+      { s: "M", sv: "Ja tack, gärna!", ja: "はい、ぜひ!", note: "gärna = 喜んで(誘いを受けるときの定番)" },
+      { s: "L", sv: "Sen måste vi diska i sjön.", ja: "そのあと湖で洗い物しなきゃね。" }
+    ]
+  },
+  {
+    id: "hike",
+    emoji: "🥾",
+    title: "ハイキング:指示を聞く",
+    desc: "出発、休憩、注意喚起 — リーダーの指示が聞ければ安心",
+    lines: [
+      { s: "L", sv: "Nu går vi! Häng med!", ja: "さあ出発!ついてきて!" },
+      { s: "L", sv: "Packa din ryggsäck och fyll på vatten.", ja: "リュックを詰めて、水を補充して。" },
+      { s: "M", sv: "Hur långt är det kvar?", ja: "あとどのくらいですか?", note: "疲れたときの必須フレーズ" },
+      { s: "L", sv: "Ungefär fem kilometer. Vi tar en paus om en kvart.", ja: "だいたい5キロ。15分後に休憩にしよう。", note: "en kvart = 15分" },
+      { s: "L", sv: "Drick mycket vatten!", ja: "水をたくさん飲んで!" },
+      { s: "L", sv: "Akta dig, det är halt här!", ja: "気をつけて、ここ滑るよ!", note: "Akta dig! = 危ない!気をつけて!(聞き逃し厳禁)" },
+      { s: "M", sv: "Jag behöver vila lite.", ja: "少し休みたいです。" },
+      { s: "K", sv: "Titta! Vilken fin utsikt!", ja: "見て!なんていい景色!" },
+      { s: "L", sv: "Vi är snart framme.", ja: "もうすぐ着くよ。" }
+    ]
+  },
+  {
+    id: "weather",
+    emoji: "🌧️",
+    title: "天気と寒さ",
+    desc: "雨対策、夜の冷え込み — 北欧の夏は寒い日もある",
+    lines: [
+      { s: "L", sv: "Det kommer att regna ikväll.", ja: "今夜は雨が降るよ。" },
+      { s: "L", sv: "Ta på dig regnjackan.", ja: "レインジャケットを着て。", note: "Ta på dig... = 〜を着なさい(指示の定番形)" },
+      { s: "M", sv: "Jag fryser. Har du en extra tröja?", ja: "寒いです。予備のセーターありますか?" },
+      { s: "K", sv: "Javisst, här. Den är varm.", ja: "もちろん、はい。これ暖かいよ。" },
+      { s: "L", sv: "Det blir kallt i natt, kanske fem grader.", ja: "今夜は冷えるよ、5度くらいかも。" },
+      { s: "M", sv: "Oj! Då sover jag med mössa.", ja: "えっ!じゃあニット帽かぶって寝ます。" },
+      { s: "L", sv: "Imorgon blir det sol, säger de.", ja: "明日は晴れるらしいよ。" },
+      { s: "M", sv: "Skönt! Jag hoppas det.", ja: "よかった!そうだといいな。" }
+    ]
+  },
+  {
+    id: "health",
+    emoji: "🩹",
+    title: "体調と困りごと",
+    desc: "靴擦れ、頭痛、トイレ… 言えないと本当に困るやつ",
+    lines: [
+      { s: "M", sv: "Jag mår inte så bra.", ja: "ちょっと気分がよくないです。", note: "må bra/dåligt = 体調・気分が良い/悪い" },
+      { s: "L", sv: "Vad är det? Har du ont någonstans?", ja: "どうした?どこか痛いの?" },
+      { s: "M", sv: "Jag har ont i huvudet.", ja: "頭が痛いです。", note: "ont i magen=お腹 / ont i foten=足 に入れ替えOK" },
+      { s: "L", sv: "Sätt dig och drick lite vatten.", ja: "座って、水を少し飲んで。" },
+      { s: "M", sv: "Jag har fått skavsår.", ja: "靴擦れができました。" },
+      { s: "L", sv: "Var är första hjälpen-lådan?", ja: "救急箱はどこだっけ?" },
+      { s: "M", sv: "Var kan man gå på toa?", ja: "トイレはどこでできますか?", note: "森では大事な質問" },
+      { s: "L", sv: "Bakom de där träden. Ta med spaden!", ja: "あの木の後ろでね。スコップ持っていって!" },
+      { s: "M", sv: "Tack för hjälpen! Nu mår jag bättre.", ja: "助けてくれてありがとう!もう良くなりました。" }
+    ]
+  },
+  {
+    id: "night",
+    emoji: "🌌",
+    title: "夜:焚き火を囲んで",
+    desc: "星空、雑談、おやすみの挨拶",
+    lines: [
+      { s: "K", sv: "Vilken mysig kväll!", ja: "なんて心地いい夜!", note: "mysig = スウェーデン人が大好きな言葉「居心地いい」" },
+      { s: "M", sv: "Titta på stjärnorna! Så vackert!", ja: "星を見て!すごくきれい!" },
+      { s: "K", sv: "Hur säger man \"stjärna\" på japanska?", ja: "「stjärna(星)」って日本語でなんて言うの?" },
+      { s: "M", sv: "Det heter \"hoshi\".", ja: "「ほし」って言うんだよ。", note: "Det heter... = 〜と言います" },
+      { s: "L", sv: "Vi ska upp tidigt imorgon.", ja: "明日は早起きだよ。" },
+      { s: "M", sv: "Jag är jättetrött. Jag går och lägger mig.", ja: "すごく疲れた。もう寝ますね。" },
+      { s: "K", sv: "God natt! Sov gott!", ja: "おやすみ!よく寝てね!" },
+      { s: "M", sv: "Detsamma! Vi ses imorgon.", ja: "そちらもね!また明日。", note: "Detsamma = あなたもね(挨拶を返す万能語)" }
+    ]
+  }
+];
+
+/* 単語カード(道具・自然) */
+const VOCAB = [
+  { sv: "ett tält", ja: "テント" },
+  { sv: "en sovsäck", ja: "寝袋" },
+  { sv: "ett liggunderlag", ja: "スリーピングマット" },
+  { sv: "en ryggsäck", ja: "リュックサック" },
+  { sv: "ett stormkök", ja: "携帯コンロ" },
+  { sv: "en pannlampa", ja: "ヘッドランプ" },
+  { sv: "en regnjacka", ja: "レインジャケット" },
+  { sv: "myggmedel", ja: "虫除けスプレー(蚊よけ)" },
+  { sv: "en karta och en kompass", ja: "地図とコンパス" },
+  { sv: "ved och eld", ja: "薪と火" },
+  { sv: "en sjö", ja: "湖" },
+  { sv: "en skog", ja: "森" },
+  { sv: "regn", ja: "雨" },
+  { sv: "frukost, lunch, middag", ja: "朝食、昼食、夕食" },
+  { sv: "en kvart", ja: "15分" },
+  { sv: "vänster / höger / rakt fram", ja: "左 / 右 / まっすぐ" }
+];
+
+/* ============================================================
+   音声 (Web Speech API)
+   ============================================================ */
+let svVoice = null;
+function pickVoice() {
+  const voices = speechSynthesis.getVoices();
+  svVoice = voices.find(v => /^sv/i.test(v.lang)) || null;
+  document.getElementById("voiceWarn").style.display =
+    (voices.length > 0 && !svVoice) ? "block" : "none";
+}
+if ("speechSynthesis" in window) {
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+}
+
+function getRate() { return parseFloat(document.getElementById("rateSlider").value); }
+
+function speak(text, rateOverride) {
+  if (!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "sv-SE";
+  if (svVoice) u.voice = svVoice;
+  u.rate = rateOverride ?? getRate();
+  speechSynthesis.speak(u);
+}
+
+/* ============================================================
+   発音チェック (SpeechRecognition, 対応ブラウザのみ)
+   ============================================================ */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+function normalize(s) {
+  return s.toLowerCase().replace(/[.,!?"“”'’\-]/g, " ").replace(/\s+/g, " ").trim();
+}
+function similarity(a, b) {
+  const wa = normalize(a).split(" "), wb = normalize(b).split(" ");
+  if (!wa.length || !wb.length) return 0;
+  const setB = new Set(wb);
+  const hit = wa.filter(w => setB.has(w)).length;
+  return hit / Math.max(wa.length, wb.length);
+}
+function listenAndCheck(target, resultEl) {
+  if (!SR) { resultEl.innerHTML = "<span class='verdict'>このブラウザは音声認識非対応です(Chrome推奨)</span>"; return; }
+  const rec = new SR();
+  rec.lang = "sv-SE";
+  rec.interimResults = false;
+  resultEl.innerHTML = "🎙️ 話してください…";
+  rec.onresult = e => {
+    const heard = e.results[0][0].transcript;
+    const sim = similarity(target, heard);
+    let verdict, color;
+    if (sim >= 0.8)      { verdict = "🎉 Perfekt!(完璧!)"; color = "#2e6b3e"; }
+    else if (sim >= 0.5) { verdict = "👍 Bra!(いい感じ、もう一回)"; color = "#8a6d1a"; }
+    else                 { verdict = "💪 En gång till!(もう一度挑戦)"; color = "#c0392b"; }
+    resultEl.innerHTML =
+      `<div class="heard">聞き取り結果: ${heard}</div><div class="verdict" style="color:${color}">${verdict}</div>`;
+  };
+  rec.onerror = () => { resultEl.innerHTML = "<span class='verdict'>うまく聞き取れませんでした。もう一度どうぞ。</span>"; };
+  rec.start();
+}
+
+/* ============================================================
+   全フレーズプール(クイズ・フレーズ帳用)
+   ============================================================ */
+const ALL_LINES = SCENES.flatMap(sc => sc.lines.map(l => ({ ...l, scene: sc.title })));
+
+/* ============================================================
+   画面描画
+   ============================================================ */
+const app = document.getElementById("app");
+let currentTab = "scenes";
+
+document.querySelectorAll("nav.tabs button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("nav.tabs button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentTab = btn.dataset.tab;
+    speechSynthesis.cancel();
+    render();
+  });
+});
+
+function render() {
+  if (currentTab === "scenes") renderSceneList();
+  else if (currentTab === "quiz") renderQuizStart();
+  else renderCards();
+}
+
+/* ---------- 会話シーン ---------- */
+function renderSceneList() {
+  app.innerHTML = `
+    <div class="section-title">シーンを選んで会話を聞いてみよう(🔊タップで音声)</div>
+    <div class="scene-list">
+      ${SCENES.map(sc => `
+        <button class="scene-card ${sc.important ? "important" : ""}" data-scene="${sc.id}">
+          <span class="emoji">${sc.emoji}</span>
+          <span><h3>${sc.title}</h3><p>${sc.desc}</p></span>
+          ${sc.important ? '<span class="badge">最重要</span>' : ""}
+        </button>`).join("")}
+    </div>`;
+  app.querySelectorAll("[data-scene]").forEach(el =>
+    el.addEventListener("click", () => renderScene(el.dataset.scene)));
+}
+
+const speakerIcon = { L: "🧭", K: "🧑‍🤝‍🧑", M: "🙋" };
+const speakerName = { L: "リーダー", K: "仲間", M: "自分" };
+
+function renderScene(id) {
+  const sc = SCENES.find(s => s.id === id);
+  let hideSv = false, hideJa = false;
+
+  function draw() {
+    app.innerHTML = `
+      <button class="back-btn">← シーン一覧へ</button>
+      <h2 style="font-size:1.05rem;margin-bottom:4px">${sc.emoji} ${sc.title}</h2>
+      <p style="font-size:.78rem;color:var(--sub);margin-bottom:12px">${sc.desc}</p>
+      <div class="view-toggles">
+        <button class="chip ${hideSv ? "on" : ""}" id="tgSv">🙈 スウェーデン語を隠す(耳だけ)</button>
+        <button class="chip ${hideJa ? "on" : ""}" id="tgJa">🇯🇵 日本語を隠す</button>
+        <button class="chip" id="playAll">▶️ 通しで聞く</button>
+      </div>
+      ${sc.lines.map((l, i) => `
+        <div class="dialog-line ${l.s === "M" ? "me" : ""}">
+          <div class="who" title="${speakerName[l.s]}">${speakerIcon[l.s]}</div>
+          <div class="bubble">
+            <div class="sv ${hideSv ? "hidden-sv" : ""}" data-i="${i}">${l.sv}</div>
+            <div class="ja ${hideJa ? "hidden-ja" : ""}">${l.ja}</div>
+            ${l.note ? `<div class="note">💡 ${l.note}</div>` : ""}
+            <div class="tools">
+              <button class="tool-btn play" data-i="${i}">🔊</button>
+              <button class="tool-btn slow" data-i="${i}">🐢</button>
+            </div>
+          </div>
+        </div>`).join("")}`;
+
+    app.querySelector(".back-btn").addEventListener("click", renderSceneList);
+    app.querySelector("#tgSv").addEventListener("click", () => { hideSv = !hideSv; draw(); });
+    app.querySelector("#tgJa").addEventListener("click", () => { hideJa = !hideJa; draw(); });
+    app.querySelectorAll(".play").forEach(b => b.addEventListener("click", () => speak(sc.lines[b.dataset.i].sv)));
+    app.querySelectorAll(".slow").forEach(b => b.addEventListener("click", () => speak(sc.lines[b.dataset.i].sv, 0.55)));
+    // ブラー中のセリフはタップで一時表示
+    app.querySelectorAll(".sv.hidden-sv").forEach(el =>
+      el.addEventListener("click", () => el.classList.remove("hidden-sv")));
+    app.querySelector("#playAll").addEventListener("click", () => playAll(sc.lines));
+  }
+  draw();
+}
+
+function playAll(lines) {
+  speechSynthesis.cancel();
+  let i = 0;
+  function next() {
+    if (i >= lines.length) return;
+    const u = new SpeechSynthesisUtterance(lines[i].sv);
+    u.lang = "sv-SE";
+    if (svVoice) u.voice = svVoice;
+    u.rate = getRate();
+    u.onend = () => { i++; setTimeout(next, 550); };
+    speechSynthesis.speak(u);
+  }
+  next();
+}
+
+/* ---------- 聞き取りクイズ ---------- */
+const QUIZ_LEN = 10;
+let quiz = null;
+
+function renderQuizStart() {
+  app.innerHTML = `
+    <div class="quiz-box" style="text-align:center">
+      <div style="font-size:2.6rem">🎧</div>
+      <h2 style="font-size:1.05rem;margin:10px 0 6px">聞き取りクイズ</h2>
+      <p style="font-size:.85rem;color:var(--sub);line-height:1.7">
+        スウェーデン語の音声だけを聞いて、<br>意味を4択から選ぼう。全${QUIZ_LEN}問。<br>
+        テキストは答えるまで見えません。
+      </p>
+      <button class="big-btn" id="startQuiz">スタート!</button>
+    </div>`;
+  app.querySelector("#startQuiz").addEventListener("click", startQuiz);
+}
+
+function startQuiz() {
+  const pool = [...ALL_LINES].sort(() => Math.random() - 0.5).slice(0, QUIZ_LEN);
+  quiz = { pool, idx: 0, score: 0 };
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = quiz.pool[quiz.idx];
+  // 誤答選択肢:他の行から3つ
+  const wrongs = ALL_LINES.filter(l => l.ja !== q.ja)
+    .sort(() => Math.random() - 0.5).slice(0, 3).map(l => l.ja);
+  const choices = [q.ja, ...wrongs].sort(() => Math.random() - 0.5);
+
+  app.innerHTML = `
+    <div class="quiz-box">
+      <div class="quiz-progress">第 ${quiz.idx + 1} / ${QUIZ_LEN} 問 ・ 正解 ${quiz.score}</div>
+      <p style="text-align:center;font-size:.85rem;color:var(--sub)">音声を聞いて意味を選ぼう</p>
+      <div class="quiz-audio-btns">
+        <button id="qPlay">🔊 再生</button>
+        <button id="qSlow">🐢 ゆっくり</button>
+      </div>
+      <div class="choices">
+        ${choices.map(c => `<button data-ja="${c.replace(/"/g, "&quot;")}">${c}</button>`).join("")}
+      </div>
+      <div id="qReveal"></div>
+    </div>`;
+
+  const play = () => speak(q.sv);
+  app.querySelector("#qPlay").addEventListener("click", play);
+  app.querySelector("#qSlow").addEventListener("click", () => speak(q.sv, 0.55));
+  setTimeout(play, 350); // 自動再生
+
+  app.querySelectorAll(".choices button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const isRight = btn.dataset.ja === q.ja;
+      if (isRight) quiz.score++;
+      app.querySelectorAll(".choices button").forEach(b => {
+        b.disabled = true;
+        if (b.dataset.ja === q.ja) b.classList.add("correct");
+        else if (b === btn) b.classList.add("wrong");
+      });
+      const rev = app.querySelector("#qReveal");
+      rev.innerHTML = `
+        <div class="quiz-reveal">
+          ${isRight ? "⭕ Rätt!(正解!)" : "❌ Fel…(残念)"}<br>
+          <span class="sv">${q.sv}</span><br>${q.ja}
+          <div style="font-size:.72rem;color:var(--sub);margin-top:4px">シーン: ${q.scene}</div>
+        </div>
+        <button class="big-btn" id="qNext">${quiz.idx + 1 < QUIZ_LEN ? "次の問題 →" : "結果を見る 🏁"}</button>`;
+      rev.querySelector("#qNext").addEventListener("click", () => {
+        quiz.idx++;
+        if (quiz.idx < QUIZ_LEN) renderQuestion();
+        else renderQuizResult();
+      });
+    });
+  });
+}
+
+function renderQuizResult() {
+  const s = quiz.score;
+  let msg;
+  if (s >= 9)      msg = "🌟 Fantastiskt! もう森に行っても大丈夫。<br>Du är redo för äventyret!";
+  else if (s >= 7) msg = "🔥 Jättebra! かなり聞き取れてる。<br>苦手なシーンだけ復習しよう。";
+  else if (s >= 4) msg = "🌲 Bra början! 会話シーンを🙈モード(耳だけ)で<br>聞き込んでからまた挑戦!";
+  else             msg = "☕ Ta det lugnt!(あせらないで)<br>まずは🆘「聞き取れなかったとき」から始めよう。";
+  app.innerHTML = `
+    <div class="quiz-box" style="text-align:center">
+      <h2 style="font-size:1rem">結果発表</h2>
+      <div class="score-big">${s} / ${QUIZ_LEN}</div>
+      <p class="score-msg">${msg}</p>
+      <button class="big-btn" id="again">もう一回挑戦</button>
+      <button class="big-btn ghost" id="toScenes">会話シーンで復習する</button>
+    </div>`;
+  app.querySelector("#again").addEventListener("click", startQuiz);
+  app.querySelector("#toScenes").addEventListener("click", () => {
+    document.querySelector('[data-tab="scenes"]').click();
+  });
+}
+
+/* ---------- フレーズ帳(フラッシュカード) ---------- */
+let deck = null, deckIdx = 0, flipped = false;
+
+function renderCards() {
+  app.innerHTML = `
+    <div class="section-title">デッキを選ぼう</div>
+    <div class="view-toggles">
+      <button class="chip on" data-deck="phrases">💬 会話フレーズ (${ALL_LINES.length})</button>
+      <button class="chip" data-deck="vocab">🎒 野外の単語 (${VOCAB.length})</button>
+    </div>
+    <div id="cardArea"></div>`;
+  const chips = app.querySelectorAll("[data-deck]");
+  chips.forEach(ch => ch.addEventListener("click", () => {
+    chips.forEach(c => c.classList.remove("on"));
+    ch.classList.add("on");
+    loadDeck(ch.dataset.deck);
+  }));
+  loadDeck("phrases");
+}
+
+function loadDeck(kind) {
+  const src = kind === "vocab" ? VOCAB : ALL_LINES;
+  deck = [...src].sort(() => Math.random() - 0.5);
+  deckIdx = 0; flipped = false;
+  drawCard();
+}
+
+function drawCard() {
+  const c = deck[deckIdx];
+  const area = document.getElementById("cardArea");
+  area.innerHTML = `
+    <div class="flash-card" id="card">
+      <div class="sv">${c.sv}</div>
+      ${flipped
+        ? `<div class="ja">${c.ja}</div>${c.note ? `<div class="hint">💡 ${c.note}</div>` : ""}`
+        : `<div class="hint">タップで意味を表示</div>`}
+    </div>
+    <div class="flash-nav">
+      <button class="tool-btn" id="cPlay" style="padding:12px">🔊 再生</button>
+      <button class="tool-btn" id="cSlow" style="padding:12px">🐢 ゆっくり</button>
+      <button class="tool-btn" id="cMic" style="padding:12px">🎙️ 発音チェック</button>
+    </div>
+    <div class="mic-result" id="micResult"></div>
+    <div class="flash-nav">
+      <button class="tool-btn" id="cPrev" style="padding:12px">← 前へ</button>
+      <button class="tool-btn" id="cNext" style="padding:12px;background:var(--forest);color:#fff;border-color:var(--forest)">次へ →</button>
+    </div>
+    <div class="flash-count">${deckIdx + 1} / ${deck.length}(シャッフル済み)</div>`;
+
+  area.querySelector("#card").addEventListener("click", () => { flipped = !flipped; drawCard(); });
+  area.querySelector("#cPlay").addEventListener("click", () => speak(c.sv));
+  area.querySelector("#cSlow").addEventListener("click", () => speak(c.sv, 0.55));
+  area.querySelector("#cMic").addEventListener("click", () =>
+    listenAndCheck(c.sv, document.getElementById("micResult")));
+  area.querySelector("#cPrev").addEventListener("click", () => {
+    deckIdx = (deckIdx - 1 + deck.length) % deck.length; flipped = false; drawCard();
+  });
+  area.querySelector("#cNext").addEventListener("click", () => {
+    deckIdx = (deckIdx + 1) % deck.length; flipped = false; drawCard();
+  });
+  speak(c.sv);
+}
+
+/* 初期表示 */
+render();
+</script>
+</body>
+</html>
