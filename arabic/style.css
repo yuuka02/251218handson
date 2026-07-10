@@ -1,0 +1,241 @@
+:root {
+  --bg: #f4f1ea;
+  --panel: #ffffff;
+  --ink: #2b2b2b;
+  --accent: #0f766e;
+  --accent-soft: #ccfbf1;
+  --ng: #dc2626;
+  --ng-soft: #fee2e2;
+  --ok: #16a34a;
+  --ok-soft: #dcfce7;
+  --border: #e2ddd0;
+  --arabic-font: "Noto Naskh Arabic", "Geeza Pro", "Traditional Arabic", serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Sans", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12px 14px 40px;
+  line-height: 1.6;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+.hidden { display: none !important; }
+
+.app-header { text-align: center; margin: 10px 0 16px; }
+.app-header h1 { font-size: 1.35rem; }
+.subtitle { color: #777; font-size: 0.85rem; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.panel h2 { font-size: 0.95rem; margin-bottom: 10px; color: var(--accent); }
+
+/* 課フィルタ */
+.lesson-filter { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.lesson-filter label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.82rem; background: var(--bg);
+  border-radius: 8px; padding: 6px 8px; cursor: pointer;
+}
+.lesson-filter input { width: 18px; height: 18px; flex-shrink: 0; }
+.filter-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+.mini-btn {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.mini-btn.danger { color: var(--ng); border-color: var(--ng-soft); margin-top: 10px; }
+
+.opt-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; font-size: 0.9rem; gap: 10px;
+}
+.opt-row select { padding: 6px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; }
+.opt-row input[type="checkbox"] { width: 22px; height: 22px; }
+.weak-badge { color: var(--ng); font-weight: bold; }
+
+/* モードボタン */
+.mode-btn {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; text-align: left;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.mode-btn.main { background: var(--accent-soft); border-color: var(--accent); }
+.mode-btn:active { transform: scale(0.98); }
+.mode-icon { font-size: 1.6rem; }
+.mode-btn small { color: #666; }
+
+.note { font-size: 0.78rem; color: #888; text-align: center; }
+
+/* クイズ共通 */
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.progress { font-size: 0.9rem; color: #666; font-weight: bold; }
+
+.prompt-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.prompt-label { font-size: 0.78rem; color: var(--accent); font-weight: bold; }
+.prompt-main { font-size: 1.5rem; font-weight: bold; margin: 6px 0; }
+.prompt-main.small { font-size: 1.1rem; }
+.prompt-main.arabic { font-family: var(--arabic-font); font-size: 2.4rem; direction: rtl; }
+.prompt-sub { font-size: 0.85rem; color: #777; min-height: 1.4em; }
+
+/* 単語カード */
+.flashcard {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  min-height: 260px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 20px; text-align: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+.card-face { width: 100%; }
+.card-face .ja { font-size: 1.4rem; font-weight: bold; }
+.card-face .ar {
+  font-family: var(--arabic-font);
+  font-size: 3rem; direction: rtl; line-height: 1.9;
+}
+.card-face .kana { color: var(--accent); font-size: 1rem; margin-top: 4px; }
+.card-face .pos { color: #999; font-size: 0.8rem; margin-top: 8px; }
+.tap-hint {
+  position: absolute; bottom: 10px; left: 0; right: 0;
+  font-size: 0.75rem; color: #aaa;
+}
+.card-actions { display: flex; gap: 10px; margin-top: 14px; }
+
+.big-btn {
+  flex: 1;
+  border: none; border-radius: 12px;
+  padding: 14px 10px;
+  font-size: 1rem; font-weight: bold;
+  cursor: pointer;
+}
+.big-btn:active { transform: scale(0.97); }
+.big-btn.ok { background: var(--accent); color: #fff; }
+.big-btn.ng { background: var(--ng-soft); color: var(--ng); }
+.big-btn.ghost { background: var(--panel); border: 1px solid var(--border); color: #666; }
+.big-btn.next { background: #f59e0b; color: #fff; width: 100%; margin-top: 10px; }
+
+/* 4択 */
+.choice-options { display: grid; gap: 10px; }
+.choice-btn {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+}
+.choice-btn.arabic { font-family: var(--arabic-font); font-size: 1.9rem; direction: rtl; }
+.choice-btn.correct { background: var(--ok-soft); border-color: var(--ok); }
+.choice-btn.wrong { background: var(--ng-soft); border-color: var(--ng); }
+.choice-btn:disabled { opacity: 0.85; }
+
+.feedback {
+  border-radius: 12px;
+  padding: 12px;
+  margin: 12px 0;
+  text-align: center;
+  font-size: 0.95rem;
+}
+.feedback.good { background: var(--ok-soft); color: #166534; }
+.feedback.bad { background: var(--ng-soft); color: #991b1b; }
+.feedback .ar-answer {
+  font-family: var(--arabic-font);
+  font-size: 2.2rem; direction: rtl; display: block; color: var(--ink);
+}
+.feedback .kana-answer { color: var(--accent); font-size: 0.9rem; }
+
+/* 文字ごとの比較タイル */
+.diff-row { margin-top: 8px; }
+.diff-row .diff-title { font-size: 0.75rem; color: #666; }
+.letter-tiles { display: flex; flex-direction: row-reverse; flex-wrap: wrap; justify-content: center; gap: 4px; margin-top: 4px; }
+.letter-tiles .tile {
+  font-family: var(--arabic-font);
+  font-size: 1.5rem;
+  min-width: 34px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  background: #fff; border: 1.5px solid var(--border);
+}
+.letter-tiles .tile.good { background: var(--ok-soft); border-color: var(--ok); }
+.letter-tiles .tile.bad { background: var(--ng-soft); border-color: var(--ng); }
+.letter-tiles .tile.space { background: transparent; border-style: dashed; }
+
+/* 綴り入力 */
+.spell-input {
+  background: #fff;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  min-height: 64px;
+  padding: 8px 12px;
+  font-family: var(--arabic-font);
+  font-size: 2.2rem;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  word-break: break-all;
+}
+.spell-input .placeholder { font-family: "Noto Sans JP", sans-serif; font-size: 0.85rem; color: #bbb; }
+
+.keyboard { margin-top: 12px; user-select: none; }
+.kb-row { display: flex; flex-direction: row-reverse; justify-content: center; gap: 5px; margin-bottom: 6px; }
+.kb-key {
+  font-family: var(--arabic-font);
+  font-size: 1.45rem;
+  flex: 1; max-width: 52px; height: 48px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-bottom-width: 3px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.kb-key:active { background: var(--accent-soft); }
+.kb-key.wide { max-width: 120px; font-family: "Noto Sans JP", sans-serif; font-size: 0.85rem; }
+
+.spell-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.spell-actions .next { flex-basis: 100%; }
+
+/* 結果 */
+.result-panel { text-align: center; }
+.result-score { font-size: 2rem; font-weight: bold; color: var(--accent); }
+.result-message { font-size: 0.95rem; }
+.wrong-list { list-style: none; }
+.wrong-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 4px; border-bottom: 1px dashed var(--border);
+  gap: 10px; font-size: 0.9rem;
+}
+.wrong-list .ar { font-family: var(--arabic-font); font-size: 1.6rem; direction: rtl; }
+.wrong-list .meta { text-align: left; flex: 1; }
+.wrong-list .meta .kana { color: var(--accent); font-size: 0.78rem; display: block; }

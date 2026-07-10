@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ゆうかの語学アプリ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: "Noto Sans JP", "Hiragino Sans", sans-serif;
+    background: linear-gradient(160deg, #f4f1ea 0%, #e8eef4 100%);
+    color: #2b2b2b;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 24px 16px;
+    line-height: 1.6;
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; text-align: center; }
+  .tagline { color: #777; font-size: 0.85rem; margin-bottom: 28px; text-align: center; }
+  .apps { width: 100%; max-width: 420px; display: grid; gap: 16px; }
+  .app-card {
+    display: flex; align-items: center; gap: 16px;
+    background: #fff;
+    border: 2px solid #e2ddd0;
+    border-radius: 16px;
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.1s;
+  }
+  .app-card:active { transform: scale(0.98); }
+  .app-icon { font-size: 2.4rem; }
+  .app-card b { font-size: 1.05rem; }
+  .app-card small { color: #666; display: block; }
+  .app-card.arabic { border-color: #0f766e; }
+  .app-card.svenska { border-color: #2e6b3e; }
+  footer { margin-top: 32px; font-size: 0.75rem; color: #999; }
+</style>
+</head>
+<body>
+  <h1>ゆうかの語学アプリ 🌍</h1>
+  <p class="tagline">練習するアプリをえらんでね</p>
+  <nav class="apps">
+    <a class="app-card arabic" href="arabic/">
+      <span class="app-icon">🕌</span>
+      <span><b>アラビア語 単語れんしゅう</b>
+      <small>第1課〜第7課 / 単語カード・4択・綴り練習</small></span>
+    </a>
+    <a class="app-card svenska" href="svenska/">
+      <span class="app-icon">🏕️</span>
+      <span><b>Äventyr Svenska</b>
+      <small>スウェーデン語 野外会話トレーナー</small></span>
+    </a>
+  </nav>
+  <footer>251218handson</footer>
+</body>
+</html>
