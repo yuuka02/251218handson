@@ -5,6 +5,22 @@ github講習会で初めて作った
 
 ---
 
+# 語学アプリ集 🌍
+
+| アプリ | 場所 | URL (GitHub Pages) |
+|---|---|---|
+| 🏠 アプリ選択ページ | `index.html` | https://yuuka02.github.io/251218handson/ |
+| 🕌 アラビア語 単語れんしゅう | `arabic/` | https://yuuka02.github.io/251218handson/arabic/ |
+| 🏕️ Äventyr Svenska(スウェーデン語 野外会話) | `svenska/` | https://yuuka02.github.io/251218handson/svenska/ |
+
+## GitHub Pages の設定(初回のみ)
+
+**Settings → Pages → 「Build and deployment」で Branch: `main` / (root) を選んで Save。**
+別のブランチが選ばれていると古いアプリだけが表示されるので注意。
+反映には1〜2分かかることがあります。
+
+---
+
 # アラビア語 単語れんしゅうアプリ 🕌
 
 教科書(第1課〜第7課)の試験範囲の単語・慣用表現を練習できるWebアプリです。
@@ -12,16 +28,14 @@ github講習会で初めて作った
 
 ## 使い方
 
-### スマホ・PCのブラウザで使う(GitHub Pages)
+### スマホ・PCのブラウザで使う
 
-1. このリポジトリの **Settings → Pages** を開く
-2. 「Build and deployment」で **Branch: main / (root)** を選んで Save
-3. 数分後に `https://yuuka02.github.io/251218handson/` で使えるようになる
-4. スマホのホーム画面に追加しておくといつでも練習できて便利!
+`https://yuuka02.github.io/251218handson/arabic/` を開く(上のPages設定が済んでいれば)。
+スマホのホーム画面に追加しておくといつでも練習できて便利!
 
 ### PCでそのまま開く
 
-`index.html` をダブルクリックしてブラウザで開くだけでも動きます(インストール不要)。
+`arabic/index.html` をダブルクリックしてブラウザで開くだけでも動きます(インストール不要)。
 
 ## モード
 
@@ -44,11 +58,13 @@ github講習会で初めて作った
 ## ファイル構成
 
 ```
-index.html   … アプリ本体
-style.css    … スタイル
-app.js       … クイズロジック・アラビア文字キーボード・判定
-data.js      … 単語データ(第1課〜第7課、約100項目)
+index.html          … アプリ選択ページ(ポータル)
+arabic/index.html   … アラビア語アプリ本体
+arabic/style.css    … スタイル
+arabic/app.js       … クイズロジック・アラビア文字キーボード・判定
+arabic/data.js      … 単語データ(第1課〜第7課、113項目)
+svenska/index.html  … スウェーデン語 野外会話トレーナー(単一ファイル)
 ```
 
-ビルド不要の静的サイト(vanilla JS)なので、`data.js` に単語を足せばそのまま出題に反映されます。
+ビルド不要の静的サイト(vanilla JS)なので、`arabic/data.js` に単語を足せばそのまま出題に反映されます。
 将来的には会話文の作文練習モードを追加予定。

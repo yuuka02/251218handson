@@ -2,151 +2,57 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>アラビア語 単語れんしゅう</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ゆうかの語学アプリ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: "Noto Sans JP", "Hiragino Sans", sans-serif;
+    background: linear-gradient(160deg, #f4f1ea 0%, #e8eef4 100%);
+    color: #2b2b2b;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 24px 16px;
+    line-height: 1.6;
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; text-align: center; }
+  .tagline { color: #777; font-size: 0.85rem; margin-bottom: 28px; text-align: center; }
+  .apps { width: 100%; max-width: 420px; display: grid; gap: 16px; }
+  .app-card {
+    display: flex; align-items: center; gap: 16px;
+    background: #fff;
+    border: 2px solid #e2ddd0;
+    border-radius: 16px;
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.1s;
+  }
+  .app-card:active { transform: scale(0.98); }
+  .app-icon { font-size: 2.4rem; }
+  .app-card b { font-size: 1.05rem; }
+  .app-card small { color: #666; display: block; }
+  .app-card.arabic { border-color: #0f766e; }
+  .app-card.svenska { border-color: #2e6b3e; }
+  footer { margin-top: 32px; font-size: 0.75rem; color: #999; }
+</style>
 </head>
 <body>
-
-<!-- ホーム画面 -->
-<section id="screen-home" class="screen active">
-  <header class="app-header">
-    <h1>アラビア語 単語れんしゅう</h1>
-    <p class="subtitle">第1課〜第7課(試験範囲)</p>
-  </header>
-
-  <div class="panel">
-    <h2>出題する課</h2>
-    <div id="lesson-filter" class="lesson-filter"></div>
-    <div class="filter-actions">
-      <button class="mini-btn" id="btn-all-lessons">全部えらぶ</button>
-      <button class="mini-btn" id="btn-no-lessons">全部はずす</button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h2>オプション</h2>
-    <label class="opt-row">
-      <span>方向(カード・4択)</span>
-      <select id="opt-direction">
-        <option value="ja2ar">日本語 → アラビア語</option>
-        <option value="ar2ja">アラビア語 → 日本語</option>
-      </select>
-    </label>
-    <label class="opt-row">
-      <span>読み(カタカナ)を表示</span>
-      <input type="checkbox" id="opt-kana" checked>
-    </label>
-    <label class="opt-row">
-      <span>苦手な単語だけ出題 <span id="weak-count" class="weak-badge"></span></span>
-      <input type="checkbox" id="opt-weak-only">
-    </label>
-    <button class="mini-btn danger" id="btn-reset-weak">苦手リストをリセット</button>
-  </div>
-
-  <div class="panel mode-panel">
-    <h2>モードをえらぶ</h2>
-    <button class="mode-btn" data-mode="card">
-      <span class="mode-icon">🃏</span>
-      <span><b>単語カード</b><br><small>めくって覚える(日⇄亜)</small></span>
-    </button>
-    <button class="mode-btn" data-mode="choice">
-      <span class="mode-icon">✅</span>
-      <span><b>4択クイズ</b><br><small>ウォームアップに</small></span>
-    </button>
-    <button class="mode-btn main" data-mode="spell">
-      <span class="mode-icon">⌨️</span>
-      <span><b>綴り(スペル)練習</b><br><small>日本語を見てアラビア語を綴る</small></span>
-    </button>
-  </div>
-
-  <p class="note">※間違えた単語は自動で「苦手リスト」に入ります。</p>
-</section>
-
-<!-- 単語カード画面 -->
-<section id="screen-card" class="screen">
-  <div class="quiz-header">
-    <button class="mini-btn" data-action="quit">← やめる</button>
-    <span id="card-progress" class="progress"></span>
-  </div>
-  <div id="flashcard" class="flashcard">
-    <div id="card-front" class="card-face"></div>
-    <div id="card-back" class="card-face back hidden"></div>
-    <p class="tap-hint" id="card-hint">タップしてめくる</p>
-  </div>
-  <div class="card-actions">
-    <button class="big-btn ng" id="btn-card-ng">まだ 😅</button>
-    <button class="big-btn ok" id="btn-card-ok">覚えた 🎉</button>
-  </div>
-</section>
-
-<!-- 4択クイズ画面 -->
-<section id="screen-choice" class="screen">
-  <div class="quiz-header">
-    <button class="mini-btn" data-action="quit">← やめる</button>
-    <span id="choice-progress" class="progress"></span>
-  </div>
-  <div class="prompt-box">
-    <p class="prompt-label" id="choice-label"></p>
-    <p class="prompt-main" id="choice-prompt"></p>
-    <p class="prompt-sub" id="choice-kana"></p>
-  </div>
-  <div id="choice-options" class="choice-options"></div>
-  <div id="choice-feedback" class="feedback hidden"></div>
-  <button class="big-btn next hidden" id="btn-choice-next">次へ →</button>
-</section>
-
-<!-- 綴り練習画面 -->
-<section id="screen-spell" class="screen">
-  <div class="quiz-header">
-    <button class="mini-btn" data-action="quit">← やめる</button>
-    <span id="spell-progress" class="progress"></span>
-  </div>
-  <div class="prompt-box">
-    <p class="prompt-label">アラビア語で綴ってみよう</p>
-    <p class="prompt-main small" id="spell-prompt"></p>
-    <p class="prompt-sub">
-      <button class="mini-btn" id="btn-spell-hint">💡 読みヒント</button>
-      <span id="spell-kana" class="hidden"></span>
-    </p>
-  </div>
-
-  <div id="spell-input" class="spell-input" dir="rtl"><span class="placeholder">下のキーボードで入力</span></div>
-
-  <div id="spell-feedback" class="feedback hidden"></div>
-
-  <div id="spell-keyboard" class="keyboard"></div>
-
-  <div class="spell-actions">
-    <button class="big-btn ghost" id="btn-spell-giveup">答えを見る</button>
-    <button class="big-btn ok" id="btn-spell-check">判定する ✔</button>
-    <button class="big-btn next hidden" id="btn-spell-next">次へ →</button>
-  </div>
-</section>
-
-<!-- 結果画面 -->
-<section id="screen-result" class="screen">
-  <header class="app-header">
-    <h1>けっか発表 🎊</h1>
-  </header>
-  <div class="panel result-panel">
-    <p id="result-score" class="result-score"></p>
-    <p id="result-message" class="result-message"></p>
-  </div>
-  <div class="panel" id="result-wrong-panel">
-    <h2>間違えた単語</h2>
-    <ul id="result-wrong-list" class="wrong-list"></ul>
-  </div>
-  <div class="card-actions">
-    <button class="big-btn ng hidden" id="btn-retry-wrong">間違えたものだけ もう一度</button>
-    <button class="big-btn ok" id="btn-go-home">ホームへ</button>
-  </div>
-</section>
-
-<script src="data.js"></script>
-<script src="app.js"></script>
+  <h1>ゆうかの語学アプリ 🌍</h1>
+  <p class="tagline">練習するアプリをえらんでね</p>
+  <nav class="apps">
+    <a class="app-card arabic" href="arabic/">
+      <span class="app-icon">🕌</span>
+      <span><b>アラビア語 単語れんしゅう</b>
+      <small>第1課〜第7課 / 単語カード・4択・綴り練習</small></span>
+    </a>
+    <a class="app-card svenska" href="svenska/">
+      <span class="app-icon">🏕️</span>
+      <span><b>Äventyr Svenska</b>
+      <small>スウェーデン語 野外会話トレーナー</small></span>
+    </a>
+  </nav>
+  <footer>251218handson</footer>
 </body>
 </html>
