@@ -9,44 +9,50 @@ Låt mig ge er en frasig
 ledtråd.
 
 3
-00:00:05,980 --> 00:00:10,900
+00:00:05,980 --> 00:00:09,100
 Det är något som man
 gärna tar ett dopp med,
-särskilt på sommaren!
 
 4
-00:00:11,020 --> 00:00:16,320
-Idag, den trettonde
-juli, är det
-internationella pommes
-frites-dagen!
+00:00:09,210 --> 00:00:10,900
+särskilt på sommaren!
 
 5
+00:00:11,020 --> 00:00:13,200
+Idag, den trettonde
+juli,
+
+6
+00:00:13,320 --> 00:00:16,320
+är det internationella
+pommes frites-dagen!
+
+7
 00:00:16,740 --> 00:00:20,620
 Oavsett om du gillar dem
 tjocka eller smala,
 
-6
+8
 00:00:20,740 --> 00:00:25,030
 är det omöjligt att bara
 äta en på en skala.
 
-7
+9
 00:00:25,500 --> 00:00:28,390
 Det är synd att de inte
 är gratis,
 
-8
+10
 00:00:28,670 --> 00:00:32,020
 för vem älskar inte
 friterad potatis?
 
-9
+11
 00:00:32,650 --> 00:00:35,230
 Vilken är din
 favoritdipp?
 
-10
+12
 00:00:35,370 --> 00:00:38,380
 Kommentera här nere!
 Hejdå!

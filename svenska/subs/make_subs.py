@@ -27,7 +27,7 @@ PLAY_W, PLAY_H = 1080, 1920
 
 # 上部字幕: 固定の長方形エリア(この中に文字をセンタリング)
 TOP_RECT_Y0 = 150     # 長方形の上端(FRAME_TOP と同じ値にして上フレームに密着させる)
-TOP_RECT_H = 430      # 長方形の高さ
+TOP_RECT_H = 380      # 長方形の高さ(最大2行ぶん)
 POS_FACE = (540, 1330)  # 「何の日」発表パネルの中心: 顔の下
 
 # 「何の日」パネルの表示区間(秒)。
@@ -35,8 +35,8 @@ POS_FACE = (540, 1330)  # 「何の日」発表パネルの中心: 顔の下
 DAY_START = 13.32
 DAY_END = 15.90
 
-FS_BASE = 68          # 基本の文字サイズ
-FS_BIG = 92           # 仕掛け(韻・ダブルミーニング)部分のサイズ ≈1.4倍
+FS_BASE = 80          # 基本の文字サイズ
+FS_BIG = 108          # 仕掛け(韻・ダブルミーニング)部分のサイズ ≈1.35倍
 FS_DAY = 96           # 記念日名(パネル内)のサイズ
 MAX_ZENKAKU = 12      # 1行の上限(全角換算)。半角は0.5で数える
 
@@ -45,7 +45,7 @@ FRAME_TOP = 150       # 上枠の高さ(タイトル帯)
 FRAME_BOTTOM = 200    # 下枠の高さ(日付が乗る)
 FRAME_SIDE = 36       # 左右の枠の幅
 COL_FRAME = "&H00FFFFFF"  # 白
-TITLE_TEXT = ""       # 上枠に入れるタイトル(例: "Morgonprat dag 1")。空なら枠のみ
+TITLE_TEXT = "Dagligt snack dag 1"  # 上枠のタイトル(「毎日トーク○日目」)。日数は毎回ここを書き換える
 
 # 「何の日」発表用の長方形パネル(テロップコーナー風)
 PANEL_W = 900         # パネルの幅
@@ -73,8 +73,10 @@ FONT = "Noto Sans CJK JP"
 CARDS = [
     "Vet ni vad det är för dag idag?",
     "Låt mig ge er en [W]frasig[/W] ledtråd.",
-    "Det är något som man gärna tar ett [W]dopp[/W] med, särskilt på sommaren!",
-    "Idag, den trettonde juli, är det [DAY]internationella pommes frites-dagen![/DAY]",
+    "Det är något som man gärna tar ett [W]dopp[/W] med,",
+    "särskilt på sommaren!",
+    "Idag, den trettonde juli,",
+    "är det [DAY]internationella pommes frites-dagen![/DAY]",
     "Oavsett om du gillar dem tjocka eller [R]smala[/R],",
     "är det omöjligt att bara äta en på en [R]skala[/R].",
     "Det är synd att de inte är [R]gratis[/R],",
@@ -273,9 +275,11 @@ def build_srt(timings):
 
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
-    # 行長チェック
+    # 行長・行数チェック(最大2行)
     for card in CARDS:
-        for line in wrap_words(card):
+        lines = wrap_words(card)
+        assert len(lines) <= 2, f"カードが3行以上です: {strip_tags(card)}"
+        for line in lines:
             w = visible_width(strip_tags(line))
             assert w <= MAX_ZENKAKU, f"行が長すぎます ({w}): {strip_tags(line)}"
     timings = load_timings()
