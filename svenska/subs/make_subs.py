@@ -25,13 +25,19 @@ import re
 OUT_BASE = "20260713_pommes"
 PLAY_W, PLAY_H = 1080, 1920
 
-# テロップの中心座標(顔の位置に合わせてここだけ調整すればOK)
-POS_TOP = (540, 470)    # 通常テロップ: 画面上部の帯
-POS_FACE = (540, 1330)  # 「何の日」発表カード([DAY]タグ入り): 顔の下
+# 上部字幕: 固定の長方形エリア(この中に文字をセンタリング)
+TOP_RECT_Y0 = 150     # 長方形の上端(FRAME_TOP と同じ値にして上フレームに密着させる)
+TOP_RECT_H = 430      # 長方形の高さ
+POS_FACE = (540, 1330)  # 「何の日」発表パネルの中心: 顔の下
+
+# 「何の日」パネルの表示区間(秒)。
+# 「är det internationella pommes frites-dagen!」の発話区間(無音検出の実測)に合わせる
+DAY_START = 13.32
+DAY_END = 15.90
 
 FS_BASE = 68          # 基本の文字サイズ
 FS_BIG = 92           # 仕掛け(韻・ダブルミーニング)部分のサイズ ≈1.4倍
-FS_DAY = 82           # 記念日発表部分のサイズ
+FS_DAY = 96           # 記念日名(パネル内)のサイズ
 MAX_ZENKAKU = 12      # 1行の上限(全角換算)。半角は0.5で数える
 
 # 四方のフレーム(スクショの白い太枠を再現)
@@ -42,7 +48,7 @@ COL_FRAME = "&H00FFFFFF"  # 白
 TITLE_TEXT = ""       # 上枠に入れるタイトル(例: "Morgonprat dag 1")。空なら枠のみ
 
 # 「何の日」発表用の長方形パネル(テロップコーナー風)
-PANEL_W = 840         # パネルの幅
+PANEL_W = 900         # パネルの幅
 PANEL_PAD = 30        # 上下の内側余白
 PANEL_BORDER = 14     # パネルの白フチの太さ
 PANEL_Y_OFFSET = 20   # パネル矩形を文字に対して下げる補正(視覚センタリング)
@@ -171,19 +177,6 @@ def render_line(line: str, colored: bool, base_color: str = COL_TEXT) -> str:
     return res
 
 
-def panel_height(card: str) -> int:
-    """発表パネルの高さ: 各行の実効フォントサイズから概算"""
-    h, size = 0, FS_BASE
-    for line in wrap_words(card):
-        line_max = size
-        for m in TAG_RE.finditer(line):
-            if m.group(1) == "/":
-                size = FS_BASE
-            else:
-                size = FS_DAY if m.group(2) == "DAY" else FS_BIG
-            line_max = max(line_max, size)
-        h += int(line_max * 1.35)
-    return h + PANEL_PAD * 2
 
 
 # ------------------------------------------------------------------ 出力
@@ -199,7 +192,6 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: MainBox,{FONT},{FS_BASE},{COL_BOX},&H000000FF,{COL_BOX},{COL_BOX},1,0,0,0,100,100,0,0,3,20,0,5,40,40,40,1
 Style: Main,{FONT},{FS_BASE},{COL_TEXT},&H000000FF,{COL_OUTLINE},&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
 Style: Panel,{FONT},{FS_BASE},&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
 Style: DateBig,{FONT},130,{COL_BOX},&H000000FF,&H00000000,&H80000000,1,0,0,0,100,100,2,0,1,7,0,2,40,40,55,1
@@ -233,28 +225,39 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         f"Dialogue: 3,{t0},{tE},DateBig,,0,0,0,,"
         f"{{\\an5\\pos({PLAY_W // 2},{PLAY_H - FRAME_BOTTOM // 2})}}{DATE_TEXT}"
     )
+    # 上部字幕: カード表示中は固定サイズのピンク長方形を敷き、その中央に文字
+    rect_w = PLAY_W - FRAME_SIDE * 2
+    top_cx, top_cy = PLAY_W // 2, TOP_RECT_Y0 + TOP_RECT_H // 2
     for card, t in zip(CARDS, timings):
         st, en = ass_time(t["start"]), ass_time(t["end"])
-        if "[DAY]" in card:
-            # 記念日発表: 顔の下に長方形パネル(ピンク地+白フチ)、白文字+黒フチ
-            x, y = POS_FACE
-            pos = f"{{\\pos({x},{y})}}"
-            w, h = PANEL_W, panel_height(card)
-            ev.append(
-                f"Dialogue: 0,{st},{en},Main,,0,0,0,,"
-                f"{{\\p1\\an5\\pos({x},{y + PANEL_Y_OFFSET})\\c{COL_BOX}\\3c&H00FFFFFF&"
-                f"\\bord{PANEL_BORDER}\\shad0}}m 0 0 l {w} 0 {w} {h} 0 {h}"
-            )
-            ev.append(
-                f"Dialogue: 1,{st},{en},Panel,,0,0,0,,"
-                f"{pos}{to_ass_text(card, colored=True, base_color='&H00FFFFFF&')}"
-            )
-        else:
-            # 通常テロップ: 上部にピンク帯+黒太字+白フチ
-            x, y = POS_TOP
-            pos = f"{{\\pos({x},{y})}}"
-            ev.append(f"Dialogue: 0,{st},{en},MainBox,,0,0,0,,{pos}{to_ass_text(card, colored=False)}")
-            ev.append(f"Dialogue: 1,{st},{en},Main,,0,0,0,,{pos}{to_ass_text(card, colored=True)}")
+        plain = re.sub(r"\[/?DAY\]", "", card)  # 発表文も上部では通常の字幕として扱う
+        ev.append(
+            f"Dialogue: 0,{st},{en},Main,,0,0,0,,"
+            f"{{\\p1\\an7\\pos({FRAME_SIDE},{TOP_RECT_Y0})\\c{COL_BOX}\\bord0\\shad0}}"
+            f"m 0 0 l {rect_w} 0 {rect_w} {TOP_RECT_H} 0 {TOP_RECT_H}"
+        )
+        ev.append(
+            f"Dialogue: 1,{st},{en},Main,,0,0,0,,"
+            f"{{\\pos({top_cx},{top_cy})}}{to_ass_text(plain, colored=True)}"
+        )
+    # 「何の日」パネル: 記念日名だけを、言っている間(DAY_START〜DAY_END)だけ顔の下に表示
+    m = re.search(r"\[DAY\](.*?)\[/DAY\]", " ".join(CARDS))
+    if m:
+        day_name = m.group(1).strip()
+        day_name = day_name[0].upper() + day_name[1:]
+        lines = wrap_words(day_name)
+        h = int(len(lines) * FS_DAY * 1.35) + PANEL_PAD * 2
+        x, y = POS_FACE
+        st, en = ass_time(DAY_START), ass_time(DAY_END)
+        ev.append(
+            f"Dialogue: 0,{st},{en},Main,,0,0,0,,"
+            f"{{\\p1\\an5\\pos({x},{y + PANEL_Y_OFFSET})\\c{COL_BOX}\\3c&H00FFFFFF&"
+            f"\\bord{PANEL_BORDER}\\shad0}}m 0 0 l {PANEL_W} 0 {PANEL_W} {h} 0 {h}"
+        )
+        ev.append(
+            f"Dialogue: 1,{st},{en},Panel,,0,0,0,,"
+            f"{{\\pos({x},{y})\\fs{FS_DAY}}}" + "\\N".join(lines)
+        )
     return header + "\n".join(ev) + "\n"
 
 
