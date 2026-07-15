@@ -34,12 +34,18 @@ FS_BIG = 92           # 仕掛け(韻・ダブルミーニング)部分のサイ
 FS_DAY = 82           # 記念日発表部分のサイズ
 MAX_ZENKAKU = 12      # 1行の上限(全角換算)。半角は0.5で数える
 
-# 四方のフレーム(スクショの黒枠を再現)
+# 四方のフレーム(スクショの白い太枠を再現)
 FRAME_TOP = 150       # 上枠の高さ(タイトル帯)
 FRAME_BOTTOM = 200    # 下枠の高さ(日付が乗る)
-FRAME_SIDE = 24       # 左右の枠の幅
-COL_FRAME = "&H00000000"  # 黒
+FRAME_SIDE = 36       # 左右の枠の幅
+COL_FRAME = "&H00FFFFFF"  # 白
 TITLE_TEXT = ""       # 上枠に入れるタイトル(例: "Morgonprat dag 1")。空なら枠のみ
+
+# 「何の日」発表用の長方形パネル(テロップコーナー風)
+PANEL_W = 840         # パネルの幅
+PANEL_PAD = 30        # 上下の内側余白
+PANEL_BORDER = 14     # パネルの白フチの太さ
+PANEL_Y_OFFSET = 20   # パネル矩形を文字に対して下げる補正(視覚センタリング)
 
 TOTAL_DURATION = 58.0  # 音声全体の推定秒数(実測が取れたら timings.json を置く)
 LEAD_IN = 0.40         # 最初のカードが出るまでの秒数
@@ -141,14 +147,14 @@ def srt_time(sec: float) -> str:
     return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
 
-def to_ass_text(card: str, colored: bool) -> str:
+def to_ass_text(card: str, colored: bool, base_color: str = COL_TEXT) -> str:
     """タグ → ASSインラインタグ変換。
     colored=False はボックス用レイヤー: サイズタグのみ反映(色は帯と同色のまま)"""
-    lines = [render_line(l, colored) for l in wrap_words(card)]
+    lines = [render_line(l, colored, base_color) for l in wrap_words(card)]
     return "\\N".join(lines)
 
 
-def render_line(line: str, colored: bool) -> str:
+def render_line(line: str, colored: bool, base_color: str = COL_TEXT) -> str:
     res = ""
     pos = 0
     for m in TAG_RE.finditer(line):
@@ -156,13 +162,28 @@ def render_line(line: str, colored: bool) -> str:
         closing, kind = m.group(1) == "/", m.group(2)
         if not closing:
             fs = FS_DAY if kind == "DAY" else FS_BIG
-            col = {"R": COL_RHYME, "W": COL_WPLAY, "DAY": COL_TEXT}[kind]
+            col = {"R": COL_RHYME, "W": COL_WPLAY, "DAY": base_color}[kind]
             res += f"{{\\fs{fs}}}" if not colored else f"{{\\fs{fs}\\c{col}}}"
         else:
-            res += f"{{\\fs{FS_BASE}}}" if not colored else f"{{\\fs{FS_BASE}\\c{COL_TEXT}}}"
+            res += f"{{\\fs{FS_BASE}}}" if not colored else f"{{\\fs{FS_BASE}\\c{base_color}}}"
         pos = m.end()
     res += line[pos:]
     return res
+
+
+def panel_height(card: str) -> int:
+    """発表パネルの高さ: 各行の実効フォントサイズから概算"""
+    h, size = 0, FS_BASE
+    for line in wrap_words(card):
+        line_max = size
+        for m in TAG_RE.finditer(line):
+            if m.group(1) == "/":
+                size = FS_BASE
+            else:
+                size = FS_DAY if m.group(2) == "DAY" else FS_BIG
+            line_max = max(line_max, size)
+        h += int(line_max * 1.35)
+    return h + PANEL_PAD * 2
 
 
 # ------------------------------------------------------------------ 出力
@@ -180,7 +201,8 @@ ScaledBorderAndShadow: yes
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: MainBox,{FONT},{FS_BASE},{COL_BOX},&H000000FF,{COL_BOX},{COL_BOX},1,0,0,0,100,100,0,0,3,20,0,5,40,40,40,1
 Style: Main,{FONT},{FS_BASE},{COL_TEXT},&H000000FF,{COL_OUTLINE},&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
-Style: DateBig,{FONT},130,{COL_BOX},&H000000FF,{COL_OUTLINE},&H80000000,1,0,0,0,100,100,2,0,1,7,4,2,40,40,55,1
+Style: Panel,{FONT},{FS_BASE},&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
+Style: DateBig,{FONT},130,{COL_BOX},&H000000FF,&H00000000,&H80000000,1,0,0,0,100,100,2,0,1,7,0,2,40,40,55,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -212,12 +234,27 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         f"{{\\an5\\pos({PLAY_W // 2},{PLAY_H - FRAME_BOTTOM // 2})}}{DATE_TEXT}"
     )
     for card, t in zip(CARDS, timings):
-        # [DAY](記念日発表)のカードだけ顔の下、それ以外は上部
-        x, y = POS_FACE if "[DAY]" in card else POS_TOP
-        pos = f"{{\\pos({x},{y})}}"
         st, en = ass_time(t["start"]), ass_time(t["end"])
-        ev.append(f"Dialogue: 0,{st},{en},MainBox,,0,0,0,,{pos}{to_ass_text(card, colored=False)}")
-        ev.append(f"Dialogue: 1,{st},{en},Main,,0,0,0,,{pos}{to_ass_text(card, colored=True)}")
+        if "[DAY]" in card:
+            # 記念日発表: 顔の下に長方形パネル(ピンク地+白フチ)、白文字+黒フチ
+            x, y = POS_FACE
+            pos = f"{{\\pos({x},{y})}}"
+            w, h = PANEL_W, panel_height(card)
+            ev.append(
+                f"Dialogue: 0,{st},{en},Main,,0,0,0,,"
+                f"{{\\p1\\an5\\pos({x},{y + PANEL_Y_OFFSET})\\c{COL_BOX}\\3c&H00FFFFFF&"
+                f"\\bord{PANEL_BORDER}\\shad0}}m 0 0 l {w} 0 {w} {h} 0 {h}"
+            )
+            ev.append(
+                f"Dialogue: 1,{st},{en},Panel,,0,0,0,,"
+                f"{pos}{to_ass_text(card, colored=True, base_color='&H00FFFFFF&')}"
+            )
+        else:
+            # 通常テロップ: 上部にピンク帯+黒太字+白フチ
+            x, y = POS_TOP
+            pos = f"{{\\pos({x},{y})}}"
+            ev.append(f"Dialogue: 0,{st},{en},MainBox,,0,0,0,,{pos}{to_ass_text(card, colored=False)}")
+            ev.append(f"Dialogue: 1,{st},{en},Main,,0,0,0,,{pos}{to_ass_text(card, colored=True)}")
     return header + "\n".join(ev) + "\n"
 
 
