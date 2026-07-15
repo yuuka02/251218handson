@@ -29,10 +29,17 @@ PLAY_W, PLAY_H = 1080, 1920
 POS_TOP = (540, 470)    # 通常テロップ: 画面上部の帯
 POS_FACE = (540, 1330)  # 「何の日」発表カード([DAY]タグ入り): 顔の下
 
-FS_BASE = 58          # 基本の文字サイズ
-FS_BIG = 80           # 仕掛け(韻・ダブルミーニング)部分のサイズ ≈1.4倍
-FS_DAY = 74           # 記念日発表部分のサイズ
+FS_BASE = 68          # 基本の文字サイズ
+FS_BIG = 92           # 仕掛け(韻・ダブルミーニング)部分のサイズ ≈1.4倍
+FS_DAY = 82           # 記念日発表部分のサイズ
 MAX_ZENKAKU = 12      # 1行の上限(全角換算)。半角は0.5で数える
+
+# 四方のフレーム(スクショの黒枠を再現)
+FRAME_TOP = 150       # 上枠の高さ(タイトル帯)
+FRAME_BOTTOM = 200    # 下枠の高さ(日付が乗る)
+FRAME_SIDE = 24       # 左右の枠の幅
+COL_FRAME = "&H00000000"  # 黒
+TITLE_TEXT = ""       # 上枠に入れるタイトル(例: "Morgonprat dag 1")。空なら枠のみ
 
 TOTAL_DURATION = 58.0  # 音声全体の推定秒数(実測が取れたら timings.json を置く)
 LEAD_IN = 0.40         # 最初のカードが出るまでの秒数
@@ -180,8 +187,30 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev = []
     total_end = max(t["end"] for t in timings) + 1.0
-    # 最下部の日付(常時表示)
-    ev.append(f"Dialogue: 2,{ass_time(0)},{ass_time(total_end)},DateBig,,0,0,0,,{DATE_TEXT}")
+    t0, tE = ass_time(0), ass_time(total_end)
+    # 四方の黒フレーム(1つの描画イベントに4本の矩形)
+    rects = [
+        (0, 0, PLAY_W, FRAME_TOP),                              # 上
+        (0, PLAY_H - FRAME_BOTTOM, PLAY_W, PLAY_H),             # 下
+        (0, FRAME_TOP, FRAME_SIDE, PLAY_H - FRAME_BOTTOM),      # 左
+        (PLAY_W - FRAME_SIDE, FRAME_TOP, PLAY_W, PLAY_H - FRAME_BOTTOM),  # 右
+    ]
+    draw = " ".join(f"m {x1} {y1} l {x2} {y1} {x2} {y2} {x1} {y2}" for x1, y1, x2, y2 in rects)
+    ev.append(
+        f"Dialogue: 2,{t0},{tE},Main,,0,0,0,,"
+        f"{{\\p1\\an7\\pos(0,0)\\bord0\\shad0\\c{COL_FRAME}}}{draw}"
+    )
+    # 上枠のタイトル(TITLE_TEXT が空なら枠のみ)
+    if TITLE_TEXT:
+        ev.append(
+            f"Dialogue: 3,{t0},{tE},DateBig,,0,0,0,,"
+            f"{{\\an5\\pos({PLAY_W // 2},{FRAME_TOP // 2})\\fs95}}{TITLE_TEXT}"
+        )
+    # 下枠の日付(常時表示)
+    ev.append(
+        f"Dialogue: 3,{t0},{tE},DateBig,,0,0,0,,"
+        f"{{\\an5\\pos({PLAY_W // 2},{PLAY_H - FRAME_BOTTOM // 2})}}{DATE_TEXT}"
+    )
     for card, t in zip(CARDS, timings):
         # [DAY](記念日発表)のカードだけ顔の下、それ以外は上部
         x, y = POS_FACE if "[DAY]" in card else POS_TOP

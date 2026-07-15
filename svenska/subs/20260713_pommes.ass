@@ -9,29 +9,30 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: MainBox,Noto Sans CJK JP,58,&H00DCC9F2,&H000000FF,&H00DCC9F2,&H00DCC9F2,1,0,0,0,100,100,0,0,3,20,0,5,40,40,40,1
-Style: Main,Noto Sans CJK JP,58,&H00000000,&H000000FF,&H00FFFFFF,&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
+Style: MainBox,Noto Sans CJK JP,68,&H00DCC9F2,&H000000FF,&H00DCC9F2,&H00DCC9F2,1,0,0,0,100,100,0,0,3,20,0,5,40,40,40,1
+Style: Main,Noto Sans CJK JP,68,&H00000000,&H000000FF,&H00FFFFFF,&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
 Style: DateBig,Noto Sans CJK JP,130,&H00DCC9F2,&H000000FF,&H00FFFFFF,&H80000000,1,0,0,0,100,100,2,0,1,7,4,2,40,40,55,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 2,0:00:00.00,0:00:39.38,DateBig,,0,0,0,,13 juli 2026
+Dialogue: 2,0:00:00.00,0:00:39.38,Main,,0,0,0,,{\p1\an7\pos(0,0)\bord0\shad0\c&H00000000}m 0 0 l 1080 0 1080 150 0 150 m 0 1720 l 1080 1720 1080 1920 0 1920 m 0 150 l 24 150 24 1720 0 1720 m 1056 150 l 1080 150 1080 1720 1056 1720
+Dialogue: 3,0:00:00.00,0:00:39.38,DateBig,,0,0,0,,{\an5\pos(540,1820)}13 juli 2026
 Dialogue: 0,0:00:00.05,0:00:02.44,MainBox,,0,0,0,,{\pos(540,470)}Vet ni vad det är för\Ndag idag?
 Dialogue: 1,0:00:00.05,0:00:02.44,Main,,0,0,0,,{\pos(540,470)}Vet ni vad det är för\Ndag idag?
-Dialogue: 0,0:00:02.56,0:00:05.77,MainBox,,0,0,0,,{\pos(540,470)}Låt mig ge er en {\fs80}frasig{\fs58}\Nledtråd.
-Dialogue: 1,0:00:02.56,0:00:05.77,Main,,0,0,0,,{\pos(540,470)}Låt mig ge er en {\fs80\c&H00303BFF}frasig{\fs58\c&H00000000}\Nledtråd.
-Dialogue: 0,0:00:05.98,0:00:10.90,MainBox,,0,0,0,,{\pos(540,470)}Det är något som man\Ngärna tar ett {\fs80}dopp{\fs58} med,\Nsärskilt på sommaren!
-Dialogue: 1,0:00:05.98,0:00:10.90,Main,,0,0,0,,{\pos(540,470)}Det är något som man\Ngärna tar ett {\fs80\c&H00303BFF}dopp{\fs58\c&H00000000} med,\Nsärskilt på sommaren!
-Dialogue: 0,0:00:11.02,0:00:16.32,MainBox,,0,0,0,,{\pos(540,1330)}Idag, den trettonde\Njuli, är det\N{\fs74}internationella pommes\Nfrites-dagen!{\fs58}
-Dialogue: 1,0:00:11.02,0:00:16.32,Main,,0,0,0,,{\pos(540,1330)}Idag, den trettonde\Njuli, är det\N{\fs74\c&H00000000}internationella pommes\Nfrites-dagen!{\fs58\c&H00000000}
-Dialogue: 0,0:00:16.74,0:00:20.62,MainBox,,0,0,0,,{\pos(540,470)}Oavsett om du gillar dem\Ntjocka eller {\fs80}smala{\fs58},
-Dialogue: 1,0:00:16.74,0:00:20.62,Main,,0,0,0,,{\pos(540,470)}Oavsett om du gillar dem\Ntjocka eller {\fs80\c&H00FF901E}smala{\fs58\c&H00000000},
-Dialogue: 0,0:00:20.74,0:00:25.03,MainBox,,0,0,0,,{\pos(540,470)}är det omöjligt att bara\Näta en på en {\fs80}skala{\fs58}.
-Dialogue: 1,0:00:20.74,0:00:25.03,Main,,0,0,0,,{\pos(540,470)}är det omöjligt att bara\Näta en på en {\fs80\c&H00FF901E}skala{\fs58\c&H00000000}.
-Dialogue: 0,0:00:25.50,0:00:28.39,MainBox,,0,0,0,,{\pos(540,470)}Det är synd att de inte\När {\fs80}gratis{\fs58},
-Dialogue: 1,0:00:25.50,0:00:28.39,Main,,0,0,0,,{\pos(540,470)}Det är synd att de inte\När {\fs80\c&H00FF901E}gratis{\fs58\c&H00000000},
-Dialogue: 0,0:00:28.67,0:00:32.02,MainBox,,0,0,0,,{\pos(540,470)}för vem älskar inte\Nfriterad {\fs80}potatis{\fs58}?
-Dialogue: 1,0:00:28.67,0:00:32.02,Main,,0,0,0,,{\pos(540,470)}för vem älskar inte\Nfriterad {\fs80\c&H00FF901E}potatis{\fs58\c&H00000000}?
+Dialogue: 0,0:00:02.56,0:00:05.77,MainBox,,0,0,0,,{\pos(540,470)}Låt mig ge er en {\fs92}frasig{\fs68}\Nledtråd.
+Dialogue: 1,0:00:02.56,0:00:05.77,Main,,0,0,0,,{\pos(540,470)}Låt mig ge er en {\fs92\c&H00303BFF}frasig{\fs68\c&H00000000}\Nledtråd.
+Dialogue: 0,0:00:05.98,0:00:10.90,MainBox,,0,0,0,,{\pos(540,470)}Det är något som man\Ngärna tar ett {\fs92}dopp{\fs68} med,\Nsärskilt på sommaren!
+Dialogue: 1,0:00:05.98,0:00:10.90,Main,,0,0,0,,{\pos(540,470)}Det är något som man\Ngärna tar ett {\fs92\c&H00303BFF}dopp{\fs68\c&H00000000} med,\Nsärskilt på sommaren!
+Dialogue: 0,0:00:11.02,0:00:16.32,MainBox,,0,0,0,,{\pos(540,1330)}Idag, den trettonde\Njuli, är det\N{\fs82}internationella pommes\Nfrites-dagen!{\fs68}
+Dialogue: 1,0:00:11.02,0:00:16.32,Main,,0,0,0,,{\pos(540,1330)}Idag, den trettonde\Njuli, är det\N{\fs82\c&H00000000}internationella pommes\Nfrites-dagen!{\fs68\c&H00000000}
+Dialogue: 0,0:00:16.74,0:00:20.62,MainBox,,0,0,0,,{\pos(540,470)}Oavsett om du gillar dem\Ntjocka eller {\fs92}smala{\fs68},
+Dialogue: 1,0:00:16.74,0:00:20.62,Main,,0,0,0,,{\pos(540,470)}Oavsett om du gillar dem\Ntjocka eller {\fs92\c&H00FF901E}smala{\fs68\c&H00000000},
+Dialogue: 0,0:00:20.74,0:00:25.03,MainBox,,0,0,0,,{\pos(540,470)}är det omöjligt att bara\Näta en på en {\fs92}skala{\fs68}.
+Dialogue: 1,0:00:20.74,0:00:25.03,Main,,0,0,0,,{\pos(540,470)}är det omöjligt att bara\Näta en på en {\fs92\c&H00FF901E}skala{\fs68\c&H00000000}.
+Dialogue: 0,0:00:25.50,0:00:28.39,MainBox,,0,0,0,,{\pos(540,470)}Det är synd att de inte\När {\fs92}gratis{\fs68},
+Dialogue: 1,0:00:25.50,0:00:28.39,Main,,0,0,0,,{\pos(540,470)}Det är synd att de inte\När {\fs92\c&H00FF901E}gratis{\fs68\c&H00000000},
+Dialogue: 0,0:00:28.67,0:00:32.02,MainBox,,0,0,0,,{\pos(540,470)}för vem älskar inte\Nfriterad {\fs92}potatis{\fs68}?
+Dialogue: 1,0:00:28.67,0:00:32.02,Main,,0,0,0,,{\pos(540,470)}för vem älskar inte\Nfriterad {\fs92\c&H00FF901E}potatis{\fs68\c&H00000000}?
 Dialogue: 0,0:00:32.65,0:00:35.23,MainBox,,0,0,0,,{\pos(540,470)}Vilken är din\Nfavoritdipp?
 Dialogue: 1,0:00:32.65,0:00:35.23,Main,,0,0,0,,{\pos(540,470)}Vilken är din\Nfavoritdipp?
 Dialogue: 0,0:00:35.37,0:00:38.38,MainBox,,0,0,0,,{\pos(540,470)}Kommentera här nere!\NHejdå!
