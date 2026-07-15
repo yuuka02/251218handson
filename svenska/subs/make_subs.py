@@ -25,8 +25,9 @@ import re
 OUT_BASE = "20260713_pommes"
 PLAY_W, PLAY_H = 1080, 1920
 
-# 字幕(顔の下)の中心座標。顔の位置に合わせてここだけ調整すればOK
-POS_X, POS_Y = 540, 1330
+# テロップの中心座標(顔の位置に合わせてここだけ調整すればOK)
+POS_TOP = (540, 470)    # 通常テロップ: 画面上部の帯
+POS_FACE = (540, 1330)  # 「何の日」発表カード([DAY]タグ入り): 顔の下
 
 FS_BASE = 58          # 基本の文字サイズ
 FS_BIG = 80           # 仕掛け(韻・ダブルミーニング)部分のサイズ ≈1.4倍
@@ -44,7 +45,7 @@ COL_BOX = "&H00DCC9F2"    # ピンク帯 (#F2C9DC)
 COL_RHYME = "&H00FF901E"  # 韻 = 青 (#1E90FF)
 COL_WPLAY = "&H00303BFF"  # ダブルミーニング = 赤 (#FF3B30)
 
-DATE_TEXT = "2026年7月13日"
+DATE_TEXT = "13 juli 2026"
 
 FONT = "Noto Sans CJK JP"
 
@@ -181,8 +182,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     total_end = max(t["end"] for t in timings) + 1.0
     # 最下部の日付(常時表示)
     ev.append(f"Dialogue: 2,{ass_time(0)},{ass_time(total_end)},DateBig,,0,0,0,,{DATE_TEXT}")
-    pos = f"{{\\pos({POS_X},{POS_Y})}}"
     for card, t in zip(CARDS, timings):
+        # [DAY](記念日発表)のカードだけ顔の下、それ以外は上部
+        x, y = POS_FACE if "[DAY]" in card else POS_TOP
+        pos = f"{{\\pos({x},{y})}}"
         st, en = ass_time(t["start"]), ass_time(t["end"])
         ev.append(f"Dialogue: 0,{st},{en},MainBox,,0,0,0,,{pos}{to_ass_text(card, colored=False)}")
         ev.append(f"Dialogue: 1,{st},{en},Main,,0,0,0,,{pos}{to_ass_text(card, colored=True)}")
