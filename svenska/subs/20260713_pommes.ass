@@ -17,25 +17,16 @@ Style: DateBig,Noto Sans CJK JP,130,&H00DCC9F2,&H000000FF,&H00000000,&H80000000,
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Dialogue: 2,0:00:00.00,0:00:39.38,Main,,0,0,0,,{\p1\an7\pos(0,0)\bord0\shad0\c&H00FFFFFF}m 0 0 l 1080 0 1080 150 0 150 m 0 1720 l 1080 1720 1080 1920 0 1920 m 0 150 l 36 150 36 1720 0 1720 m 1044 150 l 1080 150 1080 1720 1044 1720
 Dialogue: 3,0:00:00.00,0:00:39.38,DateBig,,0,0,0,,{\an5\pos(540,1820)}13 juli 2026
-Dialogue: 0,0:00:00.05,0:00:02.44,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:00.05,0:00:02.44,Main,,0,0,0,,{\pos(540,365)}Vet ni vad det är för\Ndag idag?
-Dialogue: 0,0:00:02.56,0:00:05.77,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:02.56,0:00:05.77,Main,,0,0,0,,{\pos(540,365)}Låt mig ge er en {\fs92\c&H00303BFF}frasig{\fs68\c&H00000000}\Nledtråd.
-Dialogue: 0,0:00:05.98,0:00:10.90,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:05.98,0:00:10.90,Main,,0,0,0,,{\pos(540,365)}Det är något som man\Ngärna tar ett {\fs92\c&H00303BFF}dopp{\fs68\c&H00000000} med,\Nsärskilt på sommaren!
-Dialogue: 0,0:00:11.02,0:00:16.32,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:11.02,0:00:16.32,Main,,0,0,0,,{\pos(540,365)}Idag, den trettonde\Njuli, är det\Ninternationella pommes\Nfrites-dagen!
-Dialogue: 0,0:00:16.74,0:00:20.62,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:16.74,0:00:20.62,Main,,0,0,0,,{\pos(540,365)}Oavsett om du gillar dem\Ntjocka eller {\fs92\c&H00FF901E}smala{\fs68\c&H00000000},
-Dialogue: 0,0:00:20.74,0:00:25.03,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:20.74,0:00:25.03,Main,,0,0,0,,{\pos(540,365)}är det omöjligt att bara\Näta en på en {\fs92\c&H00FF901E}skala{\fs68\c&H00000000}.
-Dialogue: 0,0:00:25.50,0:00:28.39,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:25.50,0:00:28.39,Main,,0,0,0,,{\pos(540,365)}Det är synd att de inte\När {\fs92\c&H00FF901E}gratis{\fs68\c&H00000000},
-Dialogue: 0,0:00:28.67,0:00:32.02,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:28.67,0:00:32.02,Main,,0,0,0,,{\pos(540,365)}för vem älskar inte\Nfriterad {\fs92\c&H00FF901E}potatis{\fs68\c&H00000000}?
-Dialogue: 0,0:00:32.65,0:00:35.23,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
-Dialogue: 1,0:00:32.65,0:00:35.23,Main,,0,0,0,,{\pos(540,365)}Vilken är din\Nfavoritdipp?
-Dialogue: 0,0:00:35.37,0:00:38.38,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
+Dialogue: 0,0:00:00.00,0:00:39.38,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 430 0 430
+Dialogue: 1,0:00:00.05,0:00:02.56,Main,,0,0,0,,{\pos(540,365)}Vet ni vad det är för\Ndag idag?
+Dialogue: 1,0:00:02.56,0:00:05.98,Main,,0,0,0,,{\pos(540,365)}Låt mig ge er en {\fs92\c&H00303BFF}frasig{\fs68\c&H00000000}\Nledtråd.
+Dialogue: 1,0:00:05.98,0:00:11.02,Main,,0,0,0,,{\pos(540,365)}Det är något som man\Ngärna tar ett {\fs92\c&H00303BFF}dopp{\fs68\c&H00000000} med,\Nsärskilt på sommaren!
+Dialogue: 1,0:00:11.02,0:00:16.74,Main,,0,0,0,,{\pos(540,365)}Idag, den trettonde\Njuli, är det\Ninternationella pommes\Nfrites-dagen!
+Dialogue: 1,0:00:16.74,0:00:20.74,Main,,0,0,0,,{\pos(540,365)}Oavsett om du gillar dem\Ntjocka eller {\fs92\c&H00FF901E}smala{\fs68\c&H00000000},
+Dialogue: 1,0:00:20.74,0:00:25.50,Main,,0,0,0,,{\pos(540,365)}är det omöjligt att bara\Näta en på en {\fs92\c&H00FF901E}skala{\fs68\c&H00000000}.
+Dialogue: 1,0:00:25.50,0:00:28.67,Main,,0,0,0,,{\pos(540,365)}Det är synd att de inte\När {\fs92\c&H00FF901E}gratis{\fs68\c&H00000000},
+Dialogue: 1,0:00:28.67,0:00:32.65,Main,,0,0,0,,{\pos(540,365)}för vem älskar inte\Nfriterad {\fs92\c&H00FF901E}potatis{\fs68\c&H00000000}?
+Dialogue: 1,0:00:32.65,0:00:35.37,Main,,0,0,0,,{\pos(540,365)}Vilken är din\Nfavoritdipp?
 Dialogue: 1,0:00:35.37,0:00:38.38,Main,,0,0,0,,{\pos(540,365)}Kommentera här nere!\NHejdå!
 Dialogue: 0,0:00:13.32,0:00:15.90,Main,,0,0,0,,{\p1\an5\pos(540,1350)\c&H00DCC9F2\3c&H00FFFFFF&\bord14\shad0}m 0 0 l 900 0 900 319 0 319
 Dialogue: 1,0:00:13.32,0:00:15.90,Panel,,0,0,0,,{\pos(540,1330)\fs96}Internationella pommes\Nfrites-dagen!

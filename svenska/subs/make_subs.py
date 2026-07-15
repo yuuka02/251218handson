@@ -225,17 +225,19 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         f"Dialogue: 3,{t0},{tE},DateBig,,0,0,0,,"
         f"{{\\an5\\pos({PLAY_W // 2},{PLAY_H - FRAME_BOTTOM // 2})}}{DATE_TEXT}"
     )
-    # 上部字幕: カード表示中は固定サイズのピンク長方形を敷き、その中央に文字
+    # 上部字幕: ピンクの長方形は常時表示(チカチカ防止)
     rect_w = PLAY_W - FRAME_SIDE * 2
     top_cx, top_cy = PLAY_W // 2, TOP_RECT_Y0 + TOP_RECT_H // 2
-    for card, t in zip(CARDS, timings):
-        st, en = ass_time(t["start"]), ass_time(t["end"])
+    ev.append(
+        f"Dialogue: 0,{t0},{tE},Main,,0,0,0,,"
+        f"{{\\p1\\an7\\pos({FRAME_SIDE},{TOP_RECT_Y0})\\c{COL_BOX}\\bord0\\shad0}}"
+        f"m 0 0 l {rect_w} 0 {rect_w} {TOP_RECT_H} 0 {TOP_RECT_H}"
+    )
+    # 文字は次のカードが始まるまで表示し続ける(空白の瞬間を作らない)
+    for i, (card, t) in enumerate(zip(CARDS, timings)):
+        st = ass_time(t["start"])
+        en = ass_time(timings[i + 1]["start"]) if i + 1 < len(timings) else ass_time(t["end"])
         plain = re.sub(r"\[/?DAY\]", "", card)  # 発表文も上部では通常の字幕として扱う
-        ev.append(
-            f"Dialogue: 0,{st},{en},Main,,0,0,0,,"
-            f"{{\\p1\\an7\\pos({FRAME_SIDE},{TOP_RECT_Y0})\\c{COL_BOX}\\bord0\\shad0}}"
-            f"m 0 0 l {rect_w} 0 {rect_w} {TOP_RECT_H} 0 {TOP_RECT_H}"
-        )
         ev.append(
             f"Dialogue: 1,{st},{en},Main,,0,0,0,,"
             f"{{\\pos({top_cx},{top_cy})}}{to_ass_text(plain, colored=True)}"
