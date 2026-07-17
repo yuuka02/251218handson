@@ -1,0 +1,35 @@
+[Script Info]
+; 毎朝トーク風 縦動画字幕 (自動生成: make_subs.py)
+Title: 20260713_pommes
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Main,Noto Sans CJK JP,80,&H00000000,&H000000FF,&H00FFFFFF,&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
+Style: Panel,Noto Sans CJK JP,80,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,0,5,40,40,40,1
+Style: DateBig,Noto Sans CJK JP,130,&H00DCC9F2,&H000000FF,&H00000000,&H80000000,1,0,0,0,100,100,2,0,1,7,0,2,40,40,55,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 2,0:00:00.00,0:00:39.38,Main,,0,0,0,,{\p1\an7\pos(0,0)\bord0\shad0\c&H00FFFFFF}m 0 0 l 1080 0 1080 150 0 150 m 0 1720 l 1080 1720 1080 1920 0 1920 m 0 150 l 36 150 36 1720 0 1720 m 1044 150 l 1080 150 1080 1720 1044 1720
+Dialogue: 3,0:00:00.00,0:00:39.38,DateBig,,0,0,0,,{\an5\pos(540,75)\fs95}Dagligt snack dag 1
+Dialogue: 3,0:00:00.00,0:00:39.38,DateBig,,0,0,0,,{\an5\pos(540,1820)}13 juli 2026
+Dialogue: 0,0:00:00.00,0:00:39.38,Main,,0,0,0,,{\p1\an7\pos(36,150)\c&H00DCC9F2\bord0\shad0}m 0 0 l 1008 0 1008 380 0 380
+Dialogue: 1,0:00:00.05,0:00:02.56,Main,,0,0,0,,{\pos(540,340)}Vet ni vad det är för\Ndag idag?
+Dialogue: 1,0:00:02.56,0:00:05.98,Main,,0,0,0,,{\pos(540,340)}Låt mig ge er en {\fs108\c&H00303BFF}frasig{\fs80\c&H00000000}\Nledtråd.
+Dialogue: 1,0:00:05.98,0:00:09.21,Main,,0,0,0,,{\pos(540,340)}Det är något som man\Ngärna tar ett {\fs108\c&H00303BFF}dopp{\fs80\c&H00000000} med,
+Dialogue: 1,0:00:09.21,0:00:11.02,Main,,0,0,0,,{\pos(540,340)}särskilt på sommaren!
+Dialogue: 1,0:00:11.02,0:00:13.32,Main,,0,0,0,,{\pos(540,340)}Idag, den trettonde\Njuli,
+Dialogue: 1,0:00:13.32,0:00:16.74,Main,,0,0,0,,{\pos(540,340)}är det internationella\Npommes frites-dagen!
+Dialogue: 1,0:00:16.74,0:00:20.74,Main,,0,0,0,,{\pos(540,340)}Oavsett om du gillar dem\Ntjocka eller {\fs108\c&H00FF901E}smala{\fs80\c&H00000000},
+Dialogue: 1,0:00:20.74,0:00:25.50,Main,,0,0,0,,{\pos(540,340)}är det omöjligt att bara\Näta en på en {\fs108\c&H00FF901E}skala{\fs80\c&H00000000}.
+Dialogue: 1,0:00:25.50,0:00:28.67,Main,,0,0,0,,{\pos(540,340)}Det är synd att de inte\När {\fs108\c&H00FF901E}gratis{\fs80\c&H00000000},
+Dialogue: 1,0:00:28.67,0:00:32.65,Main,,0,0,0,,{\pos(540,340)}för vem älskar inte\Nfriterad {\fs108\c&H00FF901E}potatis{\fs80\c&H00000000}?
+Dialogue: 1,0:00:32.65,0:00:35.37,Main,,0,0,0,,{\pos(540,340)}Vilken är din\Nfavoritdipp?
+Dialogue: 1,0:00:35.37,0:00:38.38,Main,,0,0,0,,{\pos(540,340)}Kommentera här nere!\NHejdå!
+Dialogue: 0,0:00:13.32,0:00:15.90,Main,,0,0,0,,{\p1\an5\pos(540,1350)\c&H00DCC9F2\3c&H00FFFFFF&\bord14\shad0}m 0 0 l 900 0 900 319 0 319
+Dialogue: 1,0:00:13.32,0:00:15.90,Panel,,0,0,0,,{\pos(540,1330)\fs96}Internationella pommes\Nfrites-dagen!

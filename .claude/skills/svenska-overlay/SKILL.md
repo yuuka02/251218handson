@@ -1,0 +1,72 @@
+---
+name: svenska-overlay
+description: スウェーデン語「毎日トーク(Dagligt snack)」ショート動画のテロップオーバーレイを生成する。音声ファイル(毎日MMDD.MP3)・台本・日数(dag N)を受け取り、無音検出でタイミングを実測し、svenska/subs/make_subs.py でASS字幕を生成、緑背景に焼き込んだクロマキー合成用MP4「MMDDoverlay.mp4」をユーザーに送る。ユーザーが「○日目のオーバーレイ作って」「今日の字幕やって」等と音声+台本を渡してきたら使う。
+---
+
+# スウェーデン語ショート動画 テロップオーバーレイ生成
+
+## 受け取るもの
+1. **音声ファイル** `毎日MMDD.MP3`(チャットにアップロードされる。Driveリンクは環境のネットワーク制限で取得不可なので、直接アップロードを頼む)
+2. **台本**(スウェーデン語+日本語訳+解説。解説に「韻」「掛詞/ダブルミーニング」「記念日名」が書かれている)
+3. **日数** N(タイトル「Dagligt snack dag N」用。毎回ユーザーが指定)
+
+## 成果物
+- `MMDDoverlay.mp4` — 1080x1920・緑背景(0x00FF00)にテロップを焼き込んだクロマキー用オーバーレイ。**ファイル名は音声ファイルの数字に合わせる**(例: 毎日0713.MP3 → 0713overlay.mp4)。SendUserFileで送る
+- `svenska/subs/` 更新一式(make_subs.py の CARDS/TITLE_TEXT/DATE_TEXT/DAY_START/DAY_END/OUT_BASE、timings.json、生成された .ass/.srt)→ コミット&プッシュ
+
+## デザイン仕様(make_subs.py が実装済み。原則いじらない)
+- 白い太枠フレーム(上150/下200/左右36px)
+- 上部: 固定ピンク長方形の中に台詞字幕。黒太字+白フチ。**1行12文字(全角換算、半角=0.5)・最大2行**
+- 韻 = 青(#1E90FF)+拡大 / ダブルミーニング = 赤(#FF3B30)+拡大。タグ `[R]..[/R]` `[W]..[/W]`
+- 「何の日」パネル: 顔の下に記念日名だけを大きく表示。`[DAY]..[/DAY]` の中身が使われ、
+  **記念日名を言っている発話区間だけ**表示(DAY_START/DAY_END)
+- 上フレーム内タイトル: `TITLE_TEXT = "Dagligt snack dag N"`
+- 下フレーム内日付: `DATE_TEXT`(スウェーデン語表記。例 "13 juli 2026")
+- チカチカ防止: ピンク長方形は常時表示、字幕テキストは次カード開始まで継続表示
+- フォント: Noto Sans CJK JP(無ければ `apt-get install -y fonts-noto-cjk`)
+
+## 手順
+
+### 1. 環境確認
+ffmpeg が無ければ `apt-get update && apt-get install -y ffmpeg fonts-noto-cjk`。
+(Whisper/HuggingFaceはネットワーク制限で使えない。タイミングは無音検出方式で取る)
+
+### 2. タイミング実測(無音検出+台本アライン)
+```bash
+ffmpeg -i 音声.MP3 -af silencedetect=noise=-32dB:d=0.28 -f null - 2>&1 | grep silence
+```
+- 無音区間の間の「発話ブロック」を列挙する
+- 台本の文を最大2行以内のカードに分割し(長文は息継ぎ位置=無音位置で分割)、
+  各カードの文字数に比例した長さで発話ブロックを割り当てる
+- 検算: 長いポーズ(0.8秒以上)がカード境界と一致すること、各カードの 秒/文字 が
+  0.05〜0.09 の範囲でだいたい揃うこと
+- `svenska/subs/timings.json` にカード数分の {start, end} を書く
+  (end は発話終わり+0.6秒程度。テキストはどうせ次カード開始まで表示継続される)
+- 記念日名フレーズ("är det <記念日名>!" など)の発話ブロックを DAY_START/DAY_END に設定
+
+### 3. make_subs.py の更新
+`svenska/subs/make_subs.py` の以下だけ書き換える:
+- `OUT_BASE`(例 "20260713_pommes")
+- `CARDS`(台本をタグ付きで。韻=[R]、ダブルミーニング=[W]、記念日名=[DAY])
+- `TITLE_TEXT` / `DATE_TEXT` / `DAY_START` / `DAY_END`
+
+### 4. 生成と検証
+```bash
+cd svenska/subs && python3 make_subs.py   # 12文字/2行制限はassertが検証
+ffmpeg -f lavfi -i "color=c=0x00FF00:s=1080x1920:d=<音声長+1>:r=30" \
+  -vf "ass=<OUT_BASE>.ass" -c:v libx264 -crf 16 -pix_fmt yuv420p -y <scratchpad>/MMDDoverlay.mp4
+```
+プレビュー確認(Readで目視): 通常カード1枚 / パネル表示中(DAY_START+1秒) / パネル表示前 の
+3フレームを抽出し、レイアウト崩れ・色・タイトル・日付をチェックしてからユーザーに送る。
+
+### 5. 納品
+- `MMDDoverlay.mp4` を SendUserFile で送付
+- svenska/subs の変更をコミットしてプッシュ
+- 初回のユーザーには CapCut 手順を添える:
+  オーバーレイを元動画の上のトラックに0:00で重ねる → 選択 → 「背景を削除」→「クロマキー」
+  → スポイトで緑を選択 → 強度80〜100 → 末尾を元動画の長さに合わせてトリム → 書き出し
+
+## 注意
+- 動画ファイル本体は受け取らない方針(サイズ上限39MB超で失敗する)。オーバーレイ方式で完結させる
+- 動画(mp4)はリポジトリにコミットしない
+- skala のように「韻とダブルミーニング両方」の語は、韻の相方がいるなら [R](青)にする
