@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-縦型ショート動画(1080x1920)用の ASS / SRT 字幕ジェネレーター
+縦型ショート動画(1080x1920)用の ASS 字幕ジェネレーター
 「毎朝トーク」風フォーマット: ピンク帯ボックス + 黒太字 + 白フチ
+
+出力する .ass は、緑背景に焼き込んでクロマキー用オーバーレイを作るための
+中間ファイル(ffmpeg の ass/subtitles フィルタが読む)。ユーザーへの納品物ではない。
 
 台本中のタグ:
   [R]...[/R]  韻(ライミング)      → 青 + 文字拡大
@@ -15,7 +18,7 @@
   - 無ければ TOTAL_DURATION 秒に文字数比で按分した推定値を使う。
 
 使い方:
-  python3 make_subs.py            → 20260713_pommes.ass / .srt を出力
+  python3 make_subs.py            → 20260713_pommes.ass を出力
 """
 import json
 import os
@@ -147,14 +150,6 @@ def ass_time(sec: float) -> str:
     return f"{h}:{m:02d}:{s:05.2f}"
 
 
-def srt_time(sec: float) -> str:
-    ms = int(round(sec * 1000))
-    h, ms = divmod(ms, 3600000)
-    m, ms = divmod(ms, 60000)
-    s, ms = divmod(ms, 1000)
-    return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
-
-
 def to_ass_text(card: str, colored: bool, base_color: str = COL_TEXT) -> str:
     """タグ → ASSインラインタグ変換。
     colored=False はボックス用レイヤー: サイズタグのみ反映(色は帯と同色のまま)"""
@@ -265,14 +260,6 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     return header + "\n".join(ev) + "\n"
 
 
-def build_srt(timings):
-    blocks = []
-    for i, (card, t) in enumerate(zip(CARDS, timings), 1):
-        text = "\n".join(strip_tags(l) for l in wrap_words(card))
-        blocks.append(f"{i}\n{srt_time(t['start'])} --> {srt_time(t['end'])}\n{text}\n")
-    return "\n".join(blocks)
-
-
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     # 行長・行数チェック(最大2行)
@@ -284,13 +271,9 @@ def main():
             assert w <= MAX_ZENKAKU, f"行が長すぎます ({w}): {strip_tags(line)}"
     timings = load_timings()
     ass_path = os.path.join(here, OUT_BASE + ".ass")
-    srt_path = os.path.join(here, OUT_BASE + ".srt")
     with open(ass_path, "w", encoding="utf-8") as f:
         f.write(build_ass(timings))
-    with open(srt_path, "w", encoding="utf-8") as f:
-        f.write(build_srt(timings))
     print(f"wrote {ass_path}")
-    print(f"wrote {srt_path}")
 
 
 if __name__ == "__main__":
