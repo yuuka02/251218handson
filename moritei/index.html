@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杜邸 MORITEI — 森を、仲間と、貸し切る。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pine:#16342A; --moss:#35543F; --mist:#E9EDE7; --paper:#FCFCFA;
+    --ink:#1A2620; --sub:#5B6A60; --amber:#C08A2D; --amber-dk:#9d6f1f;
+    --line:#D6DDD4; --ease:cubic-bezier(0.16,1,0.3,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:"Zen Kaku Gothic New",sans-serif;color:var(--ink);background:var(--mist);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .mincho{font-family:"Shippori Mincho B1",serif}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  img{display:block}
+
+  /* ヒーロー */
+  .hero{position:relative;height:100svh;min-height:560px;display:flex;align-items:flex-end;overflow:hidden;background:var(--pine)}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kb 18s var(--ease) infinite alternate}
+  @keyframes kb{from{transform:scale(1.06)}to{transform:scale(1)}}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,25,19,.28) 0%,rgba(11,25,19,.05) 40%,rgba(11,25,19,.72) 100%)}
+  .hero-in{position:relative;z-index:2;color:#fff;padding:0 22px 8vh;max-width:1120px;margin:0 auto;width:100%}
+  .eyebrow{font-size:13px;letter-spacing:.28em;font-weight:500;opacity:.9;text-transform:uppercase;margin-bottom:18px}
+  .hero h1{font-size:clamp(38px,8vw,86px);font-weight:800;line-height:1.05;letter-spacing:.02em}
+  .hero h1 small{display:block;font-size:clamp(13px,2.6vw,17px);font-weight:500;letter-spacing:.24em;opacity:.85;margin-top:14px;font-family:"Zen Kaku Gothic New"}
+  .scrollcue{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:2;color:#fff;font-size:11px;letter-spacing:.2em;opacity:.8;text-align:center}
+  .scrollcue span{display:block;width:1px;height:34px;background:#fff;margin:8px auto 0;transform-origin:top;animation:cue 1.8s var(--ease) infinite}
+  @keyframes cue{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  .sec{padding:76px 0}
+  .kicker{font-size:12px;letter-spacing:.26em;color:var(--amber-dk);font-weight:700;text-transform:uppercase;margin-bottom:14px}
+  .sec h2{font-size:clamp(26px,4.5vw,40px);font-weight:700;letter-spacing:.03em;line-height:1.3}
+  .lead{color:var(--sub);margin-top:16px;max-width:560px}
+
+  /* 写真カルーセル */
+  .rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:26px 22px 22px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .rail::before,.rail::after{content:"";flex:0 0 max(0px,calc((100vw - 1120px)/2))}
+  .shot{position:relative;flex:0 0 78%;max-width:620px;aspect-ratio:4/3;border-radius:14px;overflow:hidden;scroll-snap-align:center;background:var(--moss)}
+  .shot img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+  .shot:hover img{transform:scale(1.05)}
+  .shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(11,25,19,.66) 100%)}
+  .shot .cap{position:absolute;left:20px;bottom:16px;z-index:2;color:#fff}
+  .shot .cap b{display:block;font-family:"Shippori Mincho B1";font-size:22px;font-weight:700}
+  .shot .cap em{font-style:normal;font-size:12px;letter-spacing:.14em;opacity:.85}
+  .swipehint{color:var(--sub);font-size:12px;letter-spacing:.12em;padding:0 22px}
+  @media(min-width:760px){.shot{flex-basis:46%}}
+
+  /* できること */
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:34px}
+  .card-f{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 22px}
+  .card-f .n{font-size:12px;color:var(--amber-dk);font-weight:700;letter-spacing:.1em}
+  .card-f h3{font-family:"Shippori Mincho B1";font-size:20px;font-weight:700;margin:8px 0 8px}
+  .card-f p{color:var(--sub);font-size:14px}
+
+  /* プラン */
+  .plans{background:var(--pine);color:var(--mist)}
+  .plans .kicker{color:#dcae5a}
+  .plans h2{color:#fff}
+  .plans .lead{color:#c3d0c6}
+  .plist{display:grid;gap:20px;margin-top:38px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .plan{background:var(--paper);color:var(--ink);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(0,0,0,.22)}
+  .plan .ph{position:relative;aspect-ratio:16/10;background:var(--moss)}
+  .plan .ph img{width:100%;height:100%;object-fit:cover}
+  .badge{position:absolute;top:12px;left:12px;background:var(--amber);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 11px;border-radius:100px}
+  .plan .body{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1}
+  .plan h3{font-family:"Shippori Mincho B1";font-size:21px;font-weight:700}
+  .cap-num{color:var(--sub);font-size:13px;margin:4px 0 14px}
+  .cap-num b{color:var(--ink)}
+  .incl{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+  .incl li{font-size:13.5px;display:flex;align-items:flex-start;gap:9px}
+  .incl li.off{color:#a7b0a8}
+  .ck{flex:0 0 17px;width:17px;height:17px;border-radius:50%;margin-top:2px;display:grid;place-items:center;background:#e4efe0;color:var(--moss);font-size:10px;font-weight:800}
+  .incl li.off .ck{background:#eef0ed;color:#c0c7bf}
+  .price{margin-top:auto;border-top:1px solid var(--line);padding-top:16px}
+  .price .per{color:var(--sub);font-size:12px}
+  .price .yen{font-size:30px;font-weight:800;color:var(--amber-dk);letter-spacing:.01em}
+  .price .yen small{font-size:14px;font-weight:700}
+  .price .each{color:var(--sub);font-size:12.5px;margin-top:2px}
+  .cta{margin-top:14px;display:block;width:100%;text-align:center;background:var(--amber);color:#fff;font-weight:700;font-size:15px;letter-spacing:.06em;border:0;border-radius:10px;padding:14px;cursor:pointer;transition:background .25s var(--ease),transform .25s var(--ease)}
+  .cta:hover{background:var(--amber-dk)}
+  .cta:active{transform:scale(.98)}
+  .left{color:#c9662e;font-size:12px;font-weight:700;margin-top:10px;text-align:center}
+
+  /* クチコミ */
+  .rev-head{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:26px}
+  .score{background:var(--pine);color:#fff;border-radius:14px;padding:16px 22px;text-align:center;line-height:1.2}
+  .score b{font-family:"Shippori Mincho B1";font-size:38px;font-weight:700;display:block}
+  .score span{font-size:11px;letter-spacing:.12em;opacity:.8}
+  .rev-head p{color:var(--sub);font-size:14px}
+  .revs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:26px}
+  .rev{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .stars{color:var(--amber);letter-spacing:2px;font-size:14px}
+  .rev p{margin:10px 0 14px;font-size:14.5px;line-height:1.75}
+  .rev .who{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sub)}
+  .av{width:30px;height:30px;border-radius:50%;background:var(--moss);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;font-family:"Shippori Mincho B1"}
+
+  /* 予約の流れ */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:34px;counter-reset:s}
+  .step{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 22px 22px}
+  .step::before{counter-increment:s;content:"0" counter(s);font-family:"Shippori Mincho B1";font-size:26px;font-weight:700;color:var(--amber);display:block;margin-bottom:8px}
+  .step h4{font-size:16px;font-weight:700;margin-bottom:5px}
+  .step p{color:var(--sub);font-size:13px}
+
+  /* アクセス */
+  .access{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+  .acol{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+  .acol h4{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;gap:8px;align-items:center}
+  .acol h4 i{font-style:normal;color:var(--amber-dk)}
+  .acol p{color:var(--sub);font-size:14px;line-height:1.8}
+  @media(max-width:560px){.access{grid-template-columns:1fr}}
+
+  /* 締めCTA */
+  .final{background:var(--pine);color:#fff;text-align:center;padding:90px 22px}
+  .final h2{font-family:"Shippori Mincho B1";font-size:clamp(28px,6vw,52px);font-weight:800;letter-spacing:.04em;line-height:1.3}
+  .final .cta{max-width:280px;margin:30px auto 0}
+
+  footer{background:#102a21;color:#9fb0a3;text-align:center;padding:38px 22px 54px;font-size:12.5px;letter-spacing:.06em}
+  footer .mincho{color:#fff;font-size:20px;letter-spacing:.14em;margin-bottom:8px}
+
+  .scene{width:100%;height:100%;display:block;object-fit:cover}
+  .hero .scene{position:absolute;inset:0;animation:kb 18s var(--ease) infinite alternate}
+  .nav{position:sticky;top:0;z-index:50;background:rgba(252,252,250,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav ul{display:flex;gap:2px;list-style:none;overflow-x:auto;padding:10px 14px;max-width:1120px;margin:0 auto;scrollbar-width:none}
+  .nav ul::-webkit-scrollbar{display:none}
+  .nav a{display:block;padding:8px 14px;border-radius:100px;font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;white-space:nowrap;letter-spacing:.04em}
+  .nav a:hover{background:#e2e9e0}
+  section[id]{scroll-margin-top:66px}
+  body{background-image:url("data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27 viewBox=%270 0 220 220%27><g fill=%27none%27 stroke=%27rgba(22,52,42,0.055)%27 stroke-width=%271.4%27><path d=%27M22 38q40-24 80-8t96-6%27/><path d=%27M14 92q60-30 108-10t84 2%27/><path d=%27M20 148q50-26 98-8t88-12%27/><path d=%27M16 202q66-24 114-6t76-10%27/></g></svg>")}
+  .plans{background-image:url("data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27 viewBox=%270 0 220 220%27><g fill=%27none%27 stroke=%27rgba(255,255,255,0.05)%27 stroke-width=%271.4%27><path d=%27M22 38q40-24 80-8t96-6%27/><path d=%27M14 92q60-30 108-10t84 2%27/><path d=%27M20 148q50-26 98-8t88-12%27/><path d=%27M16 202q66-24 114-6t76-10%27/></g></svg>")}
+  .rise{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .rise.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){*,*::after{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+  <!-- ヒーロー：画像はPollinations（無料AI画像API・キー不要）で生成。失敗時はpicsumに自動フォールバック -->
+  <header class="hero">
+    <img class="scene" src="images/hero.jpg" alt="">
+    <div class="hero-in">
+      <p class="eyebrow rise">Private Forest Villa</p>
+      <h1 class="mincho rise">杜邸<small>MORITEI ── 森を、仲間と、貸し切る。</small></h1>
+    </div>
+    <div class="scrollcue">SCROLL<span></span></div>
+  </header>
+  <nav class="nav"><ul><li><a href="#gallery">ギャラリー</a></li><li><a href="#feat">特徴</a></li><li><a href="#plans">プラン・料金</a></li><li><a href="#reviews">クチコミ</a></li><li><a href="#book">予約の流れ</a></li><li><a href="#access">アクセス</a></li></ul></nav>
+
+
+  <!-- 写真カルーセル -->
+  <section id="gallery" class="sec" style="padding-bottom:14px">
+    <div class="wrap">
+      <p class="kicker rise">Gallery</p>
+      <h2 class="mincho rise">夜中まで騒いでも、<br>となりに誰もいない。</h2>
+      <p class="lead rise">森にぽつんと一棟だけ。半径数百メートルに、ほかの宿はありません。夜がどれだけ長くなっても、気をつかう相手がいない。</p>
+    </div>
+    <div class="rail" id="rail">
+      <div class="shot"><img class="scene" src="images/bbq.jpg" alt=""><div class="cap"><b>BBQガーデン</b><em>炭に火が入れば、もう解散はしない</em></div></div>
+      <div class="shot"><img class="scene" src="images/pool.jpg" alt=""><div class="cap"><b>貸切プール</b><em>時間制限も、順番待ちもなし</em></div></div>
+      <div class="shot"><img class="scene" src="images/sauna.jpg" alt=""><div class="cap"><b>本格サウナ</b><em>外気浴は、森の風で</em></div></div>
+      <div class="shot"><img class="scene" src="images/karaoke.jpg" alt=""><div class="cap"><b>カラオケルーム</b><em>朝までマイクは離さない</em></div></div>
+      <div class="shot"><img class="scene" src="images/court.jpg" alt=""><div class="cap"><b>テニス&バスケコート</b><em>汗をかいて、またサウナへ</em></div></div>
+    </div>
+    <p class="swipehint">← 横にスワイプ</p>
+  </section>
+
+  <!-- できること -->
+  <section id="feat" class="sec">
+    <div class="wrap">
+      <p class="kicker rise">Why MORITEI</p>
+      <h2 class="mincho rise">20人で来ても、狭くない。</h2>
+      <div class="feat">
+        <div class="card-f rise"><div class="n">01</div><h3 class="mincho">30人、ひとつ屋根の下</h3></div>
+        <div class="card-f rise"><div class="n">02</div><h3 class="mincho">移動は、ぜんぶ徒歩</h3></div>
+        <div class="card-f rise"><div class="n">03</div><h3 class="mincho">近所迷惑、という概念がない</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- プラン -->
+  <section id="plans" class="sec plans">
+    <div class="wrap">
+      <p class="kicker rise">Plans</p>
+      <h2 class="mincho rise">プランを選ぶ</h2>
+      <p class="lead rise">料金は1棟まるごと1泊の値段。人数で割れば、ひとりぶんはこのとおり。</p>
+      <div class="plist">
+        <article class="plan rise">
+          <div class="ph"><img class="scene" src="images/plan1.jpg" alt=""></div>
+          <div class="body">
+            <h3 class="mincho">スタンダード貸切</h3>
+            <p class="cap-num">定員 <b>〜10名</b> ／ 素泊まり</p>
+            <ul class="incl">
+              <li><span class="ck">✓</span>森の一棟まるごと貸切</li>
+              <li><span class="ck">✓</span>BBQガーデン利用</li>
+              <li><span class="ck">✓</span>無料キャンセル（3日前まで）</li>
+              <li class="off"><span class="ck">✓</span>サウナ・プール</li>
+              <li class="off"><span class="ck">✓</span>コート・カラオケ</li>
+            </ul>
+            <div class="price"><span class="per">1棟1泊</span><div class="yen"><small>¥</small>88,000</div><div class="each">10名で割ると ひとり ¥8,800</div><button class="cta">このプランを選ぶ</button></div>
+          </div>
+        </article>
+        <article class="plan rise">
+          <div class="ph"><img class="scene" src="images/plan2.jpg" alt=""><span class="badge">人気No.1</span></div>
+          <div class="body">
+            <h3 class="mincho">グループ満喫</h3>
+            <p class="cap-num">定員 <b>〜20名</b> ／ 朝食付き</p>
+            <ul class="incl">
+              <li><span class="ck">✓</span>森の一棟まるごと貸切</li>
+              <li><span class="ck">✓</span>BBQガーデン利用</li>
+              <li><span class="ck">✓</span>本格サウナ＋貸切プール</li>
+              <li><span class="ck">✓</span>朝食ビュッフェ付き</li>
+              <li class="off"><span class="ck">✓</span>コート・カラオケ</li>
+            </ul>
+            <div class="price"><span class="per">1棟1泊</span><div class="yen"><small>¥</small>158,000</div><div class="each">20名で割ると ひとり ¥7,900</div><button class="cta">このプランを選ぶ</button><p class="left">残り 2 棟</p></div>
+          </div>
+        </article>
+        <article class="plan rise">
+          <div class="ph"><img class="scene" src="images/plan3.jpg" alt=""></div>
+          <div class="body">
+            <h3 class="mincho">フルアクティブ</h3>
+            <p class="cap-num">定員 <b>〜30名</b> ／ 朝食付き</p>
+            <ul class="incl">
+              <li><span class="ck">✓</span>森の一棟まるごと貸切</li>
+              <li><span class="ck">✓</span>BBQ・サウナ・プール</li>
+              <li><span class="ck">✓</span>テニス&バスケコート</li>
+              <li><span class="ck">✓</span>カラオケルーム使い放題</li>
+              <li><span class="ck">✓</span>朝食ビュッフェ付き</li>
+            </ul>
+            <div class="price"><span class="per">1棟1泊</span><div class="yen"><small>¥</small>228,000</div><div class="each">30名で割ると ひとり ¥7,600</div><button class="cta">このプランを選ぶ</button></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▼ ここから「プランカードの先」 ▼ -->
+
+  <!-- クチコミ（アゴダのクチコミ欄イメージ） -->
+  <section id="reviews" class="sec">
+    <div class="wrap">
+      <p class="kicker rise">Reviews</p>
+      <h2 class="mincho rise">泊まった人の声</h2>
+      <div class="rev-head rise">
+        <div class="score"><b>4.8</b><span>/ 5.0</span></div>
+        <p>クチコミ 128件 ／ 大学サークル・ゼミ・友人グループの利用が中心です。</p>
+      </div>
+      <div class="revs">
+        <div class="rev rise"><div class="stars">★★★★★</div><p>サークル22人で貸切。夜中までカラオケしても、誰にも気をつかわなくてよかった。集合写真もぜんぶこの棟で撮りました。</p><div class="who"><span class="av">大</span>大学サークル・9月利用</div></div>
+        <div class="rev rise"><div class="stars">★★★★★</div><p>BBQ→サウナ→プールを無限にループしてた。とにかく移動しなくていいのが最高。次はゼミの合宿でリピートします。</p><div class="who"><span class="av">友</span>友人グループ・8月利用</div></div>
+        <div class="rev rise"><div class="stars">★★★★☆</div><p>コートでバスケしてからそのままサウナ、の流れが強すぎる。20人でも全然狭くなかったのが意外でした。</p><div class="who"><span class="av">ゼ</span>ゼミ合宿・7月利用</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 予約の流れ（本当に順番があるので番号は意味を持つ） -->
+  <section id="book" class="sec" style="background:#dfe6dd">
+    <div class="wrap">
+      <p class="kicker rise">How to book</p>
+      <h2 class="mincho rise">予約は4ステップ</h2>
+      <div class="steps">
+        <div class="step rise"><h4>プランを選ぶ</h4><p>人数と目的に合うプランを上から選択。</p></div>
+        <div class="step rise"><h4>空き状況を確認</h4><p>希望日を入れて、空いている棟をチェック。</p></div>
+        <div class="step rise"><h4>予約・お支払い</h4><p>代表者1名の登録でOK。オンライン決済に対応。</p></div>
+        <div class="step rise"><h4>当日チェックイン</h4><p>あとは森に集合するだけ。鍵は現地で受け取り。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- アクセス -->
+  <section id="access" class="sec">
+    <div class="wrap">
+      <p class="kicker rise">Access</p>
+      <h2 class="mincho rise">森までの行き方</h2>
+      <div class="access">
+        <div class="acol rise"><h4><i>車</i>クルマで</h4><p>中央自動車道 森口ICから約20分。<br>敷地内に無料駐車場10台分をご用意しています。</p></div>
+        <div class="acol rise"><h4><i>電車</i>電車＋送迎で</h4><p>杜野駅から無料送迎あり（前日までに要予約）。<br>駅からの所要時間は約15分です。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 締めのCTA -->
+  <section class="final">
+    <div class="wrap">
+      <h2 class="rise">次の集まりは、<br>森で。</h2>
+      <button class="cta rise">空き状況を見る</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="mincho">杜邸 MORITEI</div>
+    Private Forest Villa ／ 課題制作用のサンプルサイト（架空の宿泊施設です）
+  </footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        e.target.style.transitionDelay = (i%3)*0.09 + "s";
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.16});
+  document.querySelectorAll(".rise").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
