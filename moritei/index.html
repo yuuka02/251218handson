@@ -83,7 +83,7 @@
   .price .yen{font-size:30px;font-weight:800;color:var(--amber-dk);letter-spacing:.01em}
   .price .yen small{font-size:14px;font-weight:700}
   .price .each{color:var(--sub);font-size:12.5px;margin-top:2px}
-  .cta{margin-top:14px;display:block;width:100%;text-align:center;background:var(--amber);color:#fff;font-weight:700;font-size:15px;letter-spacing:.06em;border:0;border-radius:10px;padding:14px;cursor:pointer;transition:background .25s var(--ease),transform .25s var(--ease);text-decoration:none}
+  .cta{margin-top:14px;display:block;width:100%;text-align:center;background:var(--amber);color:#fff;font-weight:700;font-size:15px;letter-spacing:.06em;border:0;border-radius:10px;padding:14px;cursor:pointer;transition:background .25s var(--ease),transform .25s var(--ease)}
   .cta:hover{background:var(--amber-dk)}
   .cta:active{transform:scale(.98)}
   .left{color:#c9662e;font-size:12px;font-weight:700;margin-top:10px;text-align:center}
@@ -126,6 +126,14 @@
 
   .scene{width:100%;height:100%;display:block;object-fit:cover}
   .hero .scene{position:absolute;inset:0;animation:kb 18s var(--ease) infinite alternate}
+  .nav{position:sticky;top:0;z-index:50;background:rgba(252,252,250,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav ul{display:flex;gap:2px;list-style:none;overflow-x:auto;padding:10px 14px;max-width:1120px;margin:0 auto;scrollbar-width:none}
+  .nav ul::-webkit-scrollbar{display:none}
+  .nav a{display:block;padding:8px 14px;border-radius:100px;font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;white-space:nowrap;letter-spacing:.04em}
+  .nav a:hover{background:#e2e9e0}
+  section[id]{scroll-margin-top:66px}
+  body{background-image:url("data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27 viewBox=%270 0 220 220%27><g fill=%27none%27 stroke=%27rgba(22,52,42,0.055)%27 stroke-width=%271.4%27><path d=%27M22 38q40-24 80-8t96-6%27/><path d=%27M14 92q60-30 108-10t84 2%27/><path d=%27M20 148q50-26 98-8t88-12%27/><path d=%27M16 202q66-24 114-6t76-10%27/></g></svg>")}
+  .plans{background-image:url("data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27 viewBox=%270 0 220 220%27><g fill=%27none%27 stroke=%27rgba(255,255,255,0.05)%27 stroke-width=%271.4%27><path d=%27M22 38q40-24 80-8t96-6%27/><path d=%27M14 92q60-30 108-10t84 2%27/><path d=%27M20 148q50-26 98-8t88-12%27/><path d=%27M16 202q66-24 114-6t76-10%27/></g></svg>")}
   .rise{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
   .rise.in{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){*,*::after{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}}
@@ -133,270 +141,173 @@
 </head>
 <body>
 
-  <!-- ヒーロー:画像はPollinations(無料AI画像API・キー不要)で生成。失敗時はpicsumに自動フォールバック -->
+  <!-- ヒーロー：画像はPollinations（無料AI画像API・キー不要）で生成。失敗時はpicsumに自動フォールバック -->
   <header class="hero">
-    <img class="scene" alt="夕暮れの森に佇む一棟貸しヴィラ"
-      src="https://image.pollinations.ai/prompt/japanese%20modern%20forest%20villa%20exterior%20at%20dusk%2C%20warm%20window%20lights%2C%20tall%20cedar%20trees%2C%20mist%2C%20cinematic%2C%20photorealistic?width=1600&height=1000&nologo=true"
-      onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-hero/1600/1000'">
+    <img class="scene" src="images/hero.jpg" alt="">
     <div class="hero-in">
-      <p class="eyebrow">Private Forest Villa — Reserved for Your Crew</p>
-      <h1 class="mincho">森を、仲間と、<br>貸し切る。
-        <small>杜邸 MORITEI ― 一棟貸しの森のヴィラ / 最大12名</small>
-      </h1>
+      <p class="eyebrow rise">Private Forest Villa</p>
+      <h1 class="mincho rise">杜邸<small>MORITEI ── 森を、仲間と、貸し切る。</small></h1>
     </div>
     <div class="scrollcue">SCROLL<span></span></div>
   </header>
+  <nav class="nav"><ul><li><a href="#gallery">ギャラリー</a></li><li><a href="#feat">特徴</a></li><li><a href="#plans">プラン・料金</a></li><li><a href="#reviews">クチコミ</a></li><li><a href="#book">予約の流れ</a></li><li><a href="#access">アクセス</a></li></ul></nav>
 
-  <!-- 写真 -->
-  <section class="sec" id="scenes">
-    <div class="wrap rise">
-      <p class="kicker">Scenes</p>
-      <h2 class="mincho">ここで過ごす、いくつもの場面。</h2>
-      <p class="lead">薪火のサウナ、星の下の焚き火、朝靄のデッキ。杜邸のまわりには、写真を撮る手が止まらなくなる時間が流れています。</p>
+
+  <!-- 写真カルーセル -->
+  <section id="gallery" class="sec" style="padding-bottom:14px">
+    <div class="wrap">
+      <p class="kicker rise">Gallery</p>
+      <h2 class="mincho rise">夜中まで騒いでも、<br>となりに誰もいない。</h2>
+      <p class="lead rise">森にぽつんと一棟だけ。半径数百メートルに、ほかの宿はありません。夜がどれだけ長くなっても、気をつかう相手がいない。</p>
     </div>
-    <div class="rail">
-      <figure class="shot">
-        <img loading="lazy" alt="焚き火テラス"
-          src="https://image.pollinations.ai/prompt/friends%20around%20campfire%20at%20night%20in%20forest%20terrace%2C%20warm%20orange%20glow%2C%20sparks%2C%20cozy%2C%20photorealistic?width=1200&height=900&nologo=true"
-          onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-fire/1200/900'">
-        <figcaption class="cap"><b class="mincho">焚き火テラス</b><em>FIRE TERRACE</em></figcaption>
-      </figure>
-      <figure class="shot">
-        <img loading="lazy" alt="薪サウナ"
-          src="https://image.pollinations.ai/prompt/wooden%20barrel%20sauna%20in%20forest%2C%20steam%2C%20warm%20lantern%20light%2C%20evening%2C%20photorealistic?width=1200&height=900&nologo=true"
-          onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-sauna/1200/900'">
-        <figcaption class="cap"><b class="mincho">薪サウナ</b><em>WOOD-FIRED SAUNA</em></figcaption>
-      </figure>
-      <figure class="shot">
-        <img loading="lazy" alt="吹き抜けの大広間"
-          src="https://image.pollinations.ai/prompt/japanese%20modern%20villa%20living%20room%20interior%2C%20high%20ceiling%2C%20wood%20beams%2C%20fireplace%2C%20large%20windows%20facing%20forest%2C%20photorealistic?width=1200&height=900&nologo=true"
-          onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-living/1200/900'">
-        <figcaption class="cap"><b class="mincho">吹き抜けの大広間</b><em>GREAT ROOM</em></figcaption>
-      </figure>
-      <figure class="shot">
-        <img loading="lazy" alt="森のデッキ"
-          src="https://image.pollinations.ai/prompt/morning%20mist%20wooden%20deck%20in%20cedar%20forest%2C%20breakfast%20table%2C%20soft%20sunlight%20rays%2C%20photorealistic?width=1200&height=900&nologo=true"
-          onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-deck/1200/900'">
-        <figcaption class="cap"><b class="mincho">朝靄のデッキ</b><em>FOREST DECK</em></figcaption>
-      </figure>
-      <figure class="shot">
-        <img loading="lazy" alt="星空の露天風呂"
-          src="https://image.pollinations.ai/prompt/outdoor%20japanese%20bath%20onsen%20under%20starry%20sky%2C%20forest%2C%20steam%2C%20lanterns%2C%20photorealistic?width=1200&height=900&nologo=true"
-          onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-bath/1200/900'">
-        <figcaption class="cap"><b class="mincho">星空の露天風呂</b><em>OPEN-AIR BATH</em></figcaption>
-      </figure>
+    <div class="rail" id="rail">
+      <div class="shot"><img class="scene" src="images/bbq.jpg" alt=""><div class="cap"><b>BBQガーデン</b><em>炭に火が入れば、もう解散はしない</em></div></div>
+      <div class="shot"><img class="scene" src="images/pool.jpg" alt=""><div class="cap"><b>貸切プール</b><em>時間制限も、順番待ちもなし</em></div></div>
+      <div class="shot"><img class="scene" src="images/sauna.jpg" alt=""><div class="cap"><b>本格サウナ</b><em>外気浴は、森の風で</em></div></div>
+      <div class="shot"><img class="scene" src="images/karaoke.jpg" alt=""><div class="cap"><b>カラオケルーム</b><em>朝までマイクは離さない</em></div></div>
+      <div class="shot"><img class="scene" src="images/court.jpg" alt=""><div class="cap"><b>テニス&バスケコート</b><em>汗をかいて、またサウナへ</em></div></div>
     </div>
-    <p class="swipehint">← スワイプで写真をもっと見る →</p>
+    <p class="swipehint">← 横にスワイプ</p>
   </section>
 
   <!-- できること -->
-  <section class="sec" id="features">
-    <div class="wrap rise">
-      <p class="kicker">What You Can Do</p>
-      <h2 class="mincho">一棟貸しだから、遠慮はいらない。</h2>
-      <p class="lead">チェックインからチェックアウトまで、森も棟もぜんぶ貸切。誰にも気兼ねなく、仲間だけの時間を。</p>
+  <section id="feat" class="sec">
+    <div class="wrap">
+      <p class="kicker rise">Why MORITEI</p>
+      <h2 class="mincho rise">20人で来ても、狭くない。</h2>
       <div class="feat">
-        <div class="card-f">
-          <p class="n">01</p>
-          <h3>一棟まるごと貸切</h3>
-          <p>ベッドルーム4室+ロフトで最大12名。大広間のプロジェクターで映画も試合観戦も。</p>
-        </div>
-        <div class="card-f">
-          <p class="n">02</p>
-          <h3>薪サウナ &amp; 水風呂</h3>
-          <p>本格薪ストーブのバレルサウナと沢水の水風呂。ととのった後は森の外気浴へ。</p>
-        </div>
-        <div class="card-f">
-          <p class="n">03</p>
-          <h3>焚き火 &amp; BBQ</h3>
-          <p>屋根付きテラスで雨でもOK。焚き火台・グリル・燻製器を常備。食材手配も可能。</p>
-        </div>
-        <div class="card-f">
-          <p class="n">04</p>
-          <h3>森のアクティビティ</h3>
-          <p>敷地からつながるトレイル散策、川遊び、冬はスノーシュー。ガイドツアーも手配できます。</p>
-        </div>
+        <div class="card-f rise"><div class="n">01</div><h3 class="mincho">30人、ひとつ屋根の下</h3></div>
+        <div class="card-f rise"><div class="n">02</div><h3 class="mincho">移動は、ぜんぶ徒歩</h3></div>
+        <div class="card-f rise"><div class="n">03</div><h3 class="mincho">近所迷惑、という概念がない</h3></div>
       </div>
     </div>
   </section>
 
   <!-- プラン -->
-  <section class="sec plans" id="plans">
-    <div class="wrap rise">
-      <p class="kicker">Plans</p>
-      <h2 class="mincho">過ごし方で選べる、3つのプラン。</h2>
-      <p class="lead">すべて一棟貸切・1泊料金。人数で割れば、意外と手が届く。</p>
+  <section id="plans" class="sec plans">
+    <div class="wrap">
+      <p class="kicker rise">Plans</p>
+      <h2 class="mincho rise">プランを選ぶ</h2>
+      <p class="lead rise">料金は1棟まるごと1泊の値段。人数で割れば、ひとりぶんはこのとおり。</p>
       <div class="plist">
-        <article class="plan">
-          <div class="ph">
-            <img loading="lazy" alt="素泊まりプラン"
-              src="https://image.pollinations.ai/prompt/cozy%20villa%20bedroom%20interior%20wood%20forest%20view%2C%20soft%20morning%20light%2C%20photorealistic?width=1200&height=750&nologo=true"
-              onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-stay/1200/750'">
-          </div>
+        <article class="plan rise">
+          <div class="ph"><img class="scene" src="images/plan1.jpg" alt=""></div>
           <div class="body">
-            <h3>素泊まり 一棟貸切</h3>
-            <p class="cap-num">定員 <b>2〜12名</b> / 1泊</p>
+            <h3 class="mincho">スタンダード貸切</h3>
+            <p class="cap-num">定員 <b>〜10名</b> ／ 素泊まり</p>
             <ul class="incl">
-              <li><span class="ck">✓</span>全館貸切(ベッドルーム4+ロフト)</li>
-              <li><span class="ck">✓</span>フルキッチン・調理器具・食器</li>
-              <li><span class="ck">✓</span>焚き火台・薪(初回分)</li>
-              <li class="off"><span class="ck">—</span>薪サウナ(オプション +¥8,000)</li>
-              <li class="off"><span class="ck">—</span>BBQ食材セット(オプション)</li>
+              <li><span class="ck">✓</span>森の一棟まるごと貸切</li>
+              <li><span class="ck">✓</span>BBQガーデン利用</li>
+              <li><span class="ck">✓</span>無料キャンセル（3日前まで）</li>
+              <li class="off"><span class="ck">✓</span>サウナ・プール</li>
+              <li class="off"><span class="ck">✓</span>コート・カラオケ</li>
             </ul>
-            <div class="price">
-              <p class="per">1棟 / 1泊</p>
-              <p class="yen">¥66,000<small>〜(税込)</small></p>
-              <p class="each">12名利用なら 1人あたり ¥5,500〜</p>
-            </div>
-            <a class="cta" href="#reserve">このプランで空きを見る</a>
+            <div class="price"><span class="per">1棟1泊</span><div class="yen"><small>¥</small>88,000</div><div class="each">10名で割ると ひとり ¥8,800</div><button class="cta">このプランを選ぶ</button></div>
           </div>
         </article>
-        <article class="plan">
-          <div class="ph">
-            <span class="badge">人気 No.1</span>
-            <img loading="lazy" alt="サウナ&焚き火プラン"
-              src="https://image.pollinations.ai/prompt/barrel%20sauna%20and%20campfire%20night%20forest%20villa%2C%20warm%20glow%2C%20friends%2C%20photorealistic?width=1200&height=750&nologo=true"
-              onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-plan2/1200/750'">
-          </div>
+        <article class="plan rise">
+          <div class="ph"><img class="scene" src="images/plan2.jpg" alt=""><span class="badge">人気No.1</span></div>
           <div class="body">
-            <h3>サウナ &amp; 焚き火 満喫</h3>
-            <p class="cap-num">定員 <b>4〜12名</b> / 1泊</p>
+            <h3 class="mincho">グループ満喫</h3>
+            <p class="cap-num">定員 <b>〜20名</b> ／ 朝食付き</p>
             <ul class="incl">
-              <li><span class="ck">✓</span>全館貸切+薪サウナ使い放題</li>
-              <li><span class="ck">✓</span>焚き火セット・薪 追加無制限</li>
-              <li><span class="ck">✓</span>サウナハット・ポンチョ貸出</li>
-              <li><span class="ck">✓</span>ドリンク用クーラー&amp;氷</li>
-              <li class="off"><span class="ck">—</span>BBQ食材セット(オプション)</li>
+              <li><span class="ck">✓</span>森の一棟まるごと貸切</li>
+              <li><span class="ck">✓</span>BBQガーデン利用</li>
+              <li><span class="ck">✓</span>本格サウナ＋貸切プール</li>
+              <li><span class="ck">✓</span>朝食ビュッフェ付き</li>
+              <li class="off"><span class="ck">✓</span>コート・カラオケ</li>
             </ul>
-            <div class="price">
-              <p class="per">1棟 / 1泊</p>
-              <p class="yen">¥88,000<small>〜(税込)</small></p>
-              <p class="each">12名利用なら 1人あたり ¥7,400〜</p>
-            </div>
-            <a class="cta" href="#reserve">このプランで空きを見る</a>
-            <p class="left">今月の残り枠 わずか</p>
+            <div class="price"><span class="per">1棟1泊</span><div class="yen"><small>¥</small>158,000</div><div class="each">20名で割ると ひとり ¥7,900</div><button class="cta">このプランを選ぶ</button><p class="left">残り 2 棟</p></div>
           </div>
         </article>
-        <article class="plan">
-          <div class="ph">
-            <img loading="lazy" alt="まるごとおまかせプラン"
-              src="https://image.pollinations.ai/prompt/gourmet%20bbq%20dinner%20table%20on%20wooden%20terrace%20forest%20evening%20lanterns%2C%20photorealistic?width=1200&height=750&nologo=true"
-              onerror="this.onerror=null;this.src='https://picsum.photos/seed/moritei-plan3/1200/750'">
-          </div>
+        <article class="plan rise">
+          <div class="ph"><img class="scene" src="images/plan3.jpg" alt=""></div>
           <div class="body">
-            <h3>食材付き まるごとおまかせ</h3>
-            <p class="cap-num">定員 <b>6〜12名</b> / 1泊2食</p>
+            <h3 class="mincho">フルアクティブ</h3>
+            <p class="cap-num">定員 <b>〜30名</b> ／ 朝食付き</p>
             <ul class="incl">
-              <li><span class="ck">✓</span>全館貸切+薪サウナ使い放題</li>
-              <li><span class="ck">✓</span>地元食材のBBQディナーセット</li>
-              <li><span class="ck">✓</span>朝食(パン・スープ・コーヒー)</li>
-              <li><span class="ck">✓</span>焚き火セット・薪 追加無制限</li>
-              <li><span class="ck">✓</span>チェックアウト12時まで延長</li>
+              <li><span class="ck">✓</span>森の一棟まるごと貸切</li>
+              <li><span class="ck">✓</span>BBQ・サウナ・プール</li>
+              <li><span class="ck">✓</span>テニス&バスケコート</li>
+              <li><span class="ck">✓</span>カラオケルーム使い放題</li>
+              <li><span class="ck">✓</span>朝食ビュッフェ付き</li>
             </ul>
-            <div class="price">
-              <p class="per">1棟 / 1泊2食</p>
-              <p class="yen">¥132,000<small>〜(税込)</small></p>
-              <p class="each">12名利用なら 1人あたり ¥11,000〜</p>
-            </div>
-            <a class="cta" href="#reserve">このプランで空きを見る</a>
+            <div class="price"><span class="per">1棟1泊</span><div class="yen"><small>¥</small>228,000</div><div class="each">30名で割ると ひとり ¥7,600</div><button class="cta">このプランを選ぶ</button></div>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- クチコミ -->
-  <section class="sec" id="reviews">
-    <div class="wrap rise">
-      <p class="kicker">Reviews</p>
-      <h2 class="mincho">泊まった人の声。</h2>
-      <div class="rev-head">
-        <div class="score"><b>4.8</b><span>/ 5.0 ・ 直近1年のクチコミ</span></div>
-        <p>サウナと焚き火、そして「誰にも気を使わない広さ」への評価が集まっています。</p>
+  <!-- ▼ ここから「プランカードの先」 ▼ -->
+
+  <!-- クチコミ（アゴダのクチコミ欄イメージ） -->
+  <section id="reviews" class="sec">
+    <div class="wrap">
+      <p class="kicker rise">Reviews</p>
+      <h2 class="mincho rise">泊まった人の声</h2>
+      <div class="rev-head rise">
+        <div class="score"><b>4.8</b><span>/ 5.0</span></div>
+        <p>クチコミ 128件 ／ 大学サークル・ゼミ・友人グループの利用が中心です。</p>
       </div>
       <div class="revs">
-        <article class="rev">
-          <p class="stars">★★★★★</p>
-          <p>大学の同期8人で利用。サウナ→沢水→森の外気浴のループが最高すぎて、全員無口になりました。大広間で朝まで語れたのも良い思い出です。</p>
-          <div class="who"><span class="av">K</span>20代・男性 / 8名グループ</div>
-        </article>
-        <article class="rev">
-          <p class="stars">★★★★★</p>
-          <p>子連れ3家族で貸切。子どもたちは川遊びとロフトに夢中、大人は焚き火でゆっくり。ほかの宿泊客がいない安心感は一棟貸しならではでした。</p>
-          <div class="who"><span class="av">M</span>30代・女性 / 3家族11名</div>
-        </article>
-        <article class="rev">
-          <p class="stars">★★★★☆</p>
-          <p>会社のチーム合宿で利用。Wi-Fiが安定していて日中はワーク、夜はBBQと切り替えやすい。食材付きプランは準備ゼロで助かりました。</p>
-          <div class="who"><span class="av">T</span>40代・男性 / 6名チーム</div>
-        </article>
+        <div class="rev rise"><div class="stars">★★★★★</div><p>サークル22人で貸切。夜中までカラオケしても、誰にも気をつかわなくてよかった。集合写真もぜんぶこの棟で撮りました。</p><div class="who"><span class="av">大</span>大学サークル・9月利用</div></div>
+        <div class="rev rise"><div class="stars">★★★★★</div><p>BBQ→サウナ→プールを無限にループしてた。とにかく移動しなくていいのが最高。次はゼミの合宿でリピートします。</p><div class="who"><span class="av">友</span>友人グループ・8月利用</div></div>
+        <div class="rev rise"><div class="stars">★★★★☆</div><p>コートでバスケしてからそのままサウナ、の流れが強すぎる。20人でも全然狭くなかったのが意外でした。</p><div class="who"><span class="av">ゼ</span>ゼミ合宿・7月利用</div></div>
       </div>
     </div>
   </section>
 
-  <!-- 予約の流れ -->
-  <section class="sec" id="flow">
-    <div class="wrap rise">
-      <p class="kicker">How to Book</p>
-      <h2 class="mincho">予約はかんたん、4ステップ。</h2>
+  <!-- 予約の流れ（本当に順番があるので番号は意味を持つ） -->
+  <section id="book" class="sec" style="background:#dfe6dd">
+    <div class="wrap">
+      <p class="kicker rise">How to book</p>
+      <h2 class="mincho rise">予約は4ステップ</h2>
       <div class="steps">
-        <div class="step">
-          <h4>空き状況を確認</h4>
-          <p>カレンダーから希望日と人数を選択。仮押さえは無料です。</p>
-        </div>
-        <div class="step">
-          <h4>プランを選ぶ</h4>
-          <p>素泊まり/サウナ満喫/食材付きから。オプションは後から追加OK。</p>
-        </div>
-        <div class="step">
-          <h4>オンライン決済</h4>
-          <p>クレジットカード決済で予約確定。7日前までキャンセル無料。</p>
-        </div>
-        <div class="step">
-          <h4>当日チェックイン</h4>
-          <p>15時からスマートロックでセルフチェックイン。あとは森を貸切るだけ。</p>
-        </div>
+        <div class="step rise"><h4>プランを選ぶ</h4><p>人数と目的に合うプランを上から選択。</p></div>
+        <div class="step rise"><h4>空き状況を確認</h4><p>希望日を入れて、空いている棟をチェック。</p></div>
+        <div class="step rise"><h4>予約・お支払い</h4><p>代表者1名の登録でOK。オンライン決済に対応。</p></div>
+        <div class="step rise"><h4>当日チェックイン</h4><p>あとは森に集合するだけ。鍵は現地で受け取り。</p></div>
       </div>
     </div>
   </section>
 
   <!-- アクセス -->
-  <section class="sec" id="access">
-    <div class="wrap rise">
-      <p class="kicker">Access</p>
-      <h2 class="mincho">都心から、約2時間の森。</h2>
+  <section id="access" class="sec">
+    <div class="wrap">
+      <p class="kicker rise">Access</p>
+      <h2 class="mincho rise">森までの行き方</h2>
       <div class="access">
-        <div class="acol">
-          <h4><i>🚗</i>お車の場合</h4>
-          <p>中央道・最寄りICから約20分。敷地内に無料駐車場4台分(冬期はスタッドレス必須)。買い出しは IC近くのスーパーが最終ポイントです。</p>
-        </div>
-        <div class="acol">
-          <h4><i>🚃</i>電車の場合</h4>
-          <p>特急で最寄り駅まで約2時間、駅から送迎(要予約・無料)で15分。タクシー利用の場合は約¥3,000です。</p>
-        </div>
+        <div class="acol rise"><h4><i>車</i>クルマで</h4><p>中央自動車道 森口ICから約20分。<br>敷地内に無料駐車場10台分をご用意しています。</p></div>
+        <div class="acol rise"><h4><i>電車</i>電車＋送迎で</h4><p>杜野駅から無料送迎あり（前日までに要予約）。<br>駅からの所要時間は約15分です。</p></div>
       </div>
     </div>
   </section>
 
-  <!-- 締めCTA -->
-  <section class="final" id="reserve">
-    <div class="rise">
-      <h2>次の週末、<br>森はもう押さえた?</h2>
-      <a class="cta" href="mailto:stay@moritei.example.com?subject=杜邸MORITEI 予約問い合わせ">空き状況を問い合わせる</a>
+  <!-- 締めのCTA -->
+  <section class="final">
+    <div class="wrap">
+      <h2 class="rise">次の集まりは、<br>森で。</h2>
+      <button class="cta rise">空き状況を見る</button>
     </div>
   </section>
 
   <footer>
-    <p class="mincho">杜邸 MORITEI</p>
-    <p>森を、仲間と、貸し切る。 ― Private Forest Villa</p>
-    <p>© 2026 MORITEI. このページはデモサイトです。</p>
+    <div class="mincho">杜邸 MORITEI</div>
+    Private Forest Villa ／ 課題制作用のサンプルサイト（架空の宿泊施設です）
   </footer>
 
-  <script>
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.rise').forEach(el => io.observe(el));
-  </script>
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        e.target.style.transitionDelay = (i%3)*0.09 + "s";
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.16});
+  document.querySelectorAll(".rise").forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
